@@ -1,0 +1,1549 @@
+<!DOCTYPE html>
+<html class="dark" lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>RegWatch — AI Regulatory Intelligence Platform</title>
+  
+  <!-- Material Symbols & Geist Fonts -->
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@100..900&family=JetBrains+Mono:wght@400;500;600&display=swap">
+  
+  <style>
+    @layer base {
+      html, body { margin: 0; padding: 0; background: #051424; color: #d4e4fa; }
+      body { overscroll-behavior: none; }
+    }
+    ::-webkit-scrollbar { display: none; }
+  </style>
+
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            "surface": "#051424",
+            "surface-dim": "#051424",
+            "surface-bright": "#2c3a4c",
+            "surface-container-lowest": "#010f1f",
+            "surface-container-low": "#0d1c2d",
+            "surface-container": "#122131",
+            "surface-container-high": "#1c2b3c",
+            "surface-container-highest": "#273647",
+            "on-surface": "#d4e4fa",
+            "on-surface-variant": "#c7c4d7",
+            "outline": "#908fa0",
+            "outline-variant": "#464554",
+            "primary": "#c0c1ff",
+            "on-primary": "#1000a9",
+            "primary-container": "#8083ff",
+            "on-primary-container": "#0d0096",
+            "secondary": "#4edea3",
+            "on-secondary": "#003824",
+            "secondary-container": "#00a572",
+            "tertiary": "#ffb95f",
+            "on-tertiary": "#472a00",
+            "tertiary-container": "#ca8100",
+            "error": "#ffb4ab",
+            "on-error": "#690005",
+            "error-container": "#93000a",
+          },
+          borderRadius: { DEFAULT: "0.25rem", lg: "0.5rem", xl: "0.75rem", full: "9999px" },
+          fontFamily: {
+            "headline": ["Geist", "sans-serif"],
+            "body": ["Geist", "sans-serif"],
+            "code": ["JetBrains Mono", "monospace"]
+          }
+        }
+      }
+    };
+  </script>
+</head>
+<body class="bg-surface font-body text-on-surface antialiased">
+
+  <!-- SIDEBAR NAVIGATION -->
+  <aside class="fixed left-0 top-0 h-full w-64 bg-surface-container-low z-50 flex flex-col justify-between py-6 px-4 border-r border-surface-container-high/40 shadow-lg">
+    <div class="flex flex-col gap-6">
+      <!-- BRAND LOGO -->
+      <div class="flex items-center gap-3 px-2 cursor-pointer" onclick="navigateTo('home')">
+        <div class="w-9 h-9 rounded-lg bg-surface-container-high flex items-center justify-center text-primary shadow-sm">
+          <span class="material-symbols-outlined text-[20px]">verified_user</span>
+        </div>
+        <div class="flex flex-col">
+          <div class="flex items-center gap-2">
+            <span class="font-bold text-lg tracking-tight text-on-surface">REGWATCH</span>
+            <span class="px-1.5 py-0.5 rounded-full bg-secondary/10 text-secondary text-[10px] font-semibold uppercase">AI</span>
+          </div>
+          <span class="text-[11px] text-on-surface-variant uppercase tracking-wider">Compliance Intel</span>
+        </div>
+      </div>
+
+      <!-- NAV LINKS -->
+      <nav class="flex flex-col gap-1" id="navLinks">
+        <a class="nav-item flex items-center gap-3 px-3 py-2.5 rounded-lg transition-all text-on-surface font-medium cursor-pointer bg-surface-container-high" data-target="home" onclick="navigateTo('home')">
+          <span class="material-symbols-outlined text-[20px]">home</span>
+          <span>Home</span>
+        </a>
+        <a class="nav-item flex items-center gap-3 px-3 py-2.5 rounded-lg transition-all text-on-surface-variant hover:bg-surface-container hover:text-on-surface cursor-pointer" data-target="saved-profiles" onclick="navigateTo('saved-profiles')">
+          <span class="material-symbols-outlined text-[20px]">folder</span>
+          <span>Saved Profiles</span>
+        </a>
+        <a class="nav-item flex items-center gap-3 px-3 py-2.5 rounded-lg transition-all text-on-surface-variant hover:bg-surface-container hover:text-on-surface cursor-pointer" data-target="new-scan" onclick="navigateTo('new-scan')">
+          <span class="material-symbols-outlined text-[20px]">add_circle</span>
+          <span>New Scan</span>
+        </a>
+        <a class="nav-item flex items-center gap-3 px-3 py-2.5 rounded-lg transition-all text-on-surface-variant hover:bg-surface-container hover:text-on-surface cursor-pointer" data-target="active-workspace" onclick="navigateTo('active-workspace')">
+          <span class="material-symbols-outlined text-[20px]">grid_view</span>
+          <span>Active Workspace</span>
+        </a>
+      </nav>
+    </div>
+
+    <!-- USER BADGE -->
+    <div class="px-2">
+      <div class="flex items-center justify-between p-2.5 rounded-xl bg-surface-container hover:bg-surface-container-high transition-colors">
+        <div class="flex items-center gap-3">
+          <div class="w-8 h-8 rounded-full bg-primary flex items-center justify-center">
+            <span class="material-symbols-outlined text-on-primary text-[18px]">person</span>
+          </div>
+          <div class="flex flex-col">
+            <span class="text-xs font-semibold text-on-surface">Compliance Officer</span>
+            <span class="text-[11px] text-on-surface-variant">demo@regwatch.io</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </aside>
+
+  <!-- MAIN CONTAINER -->
+  <div class="pl-64">
+    <!-- TOP HEADER -->
+    <header class="fixed top-0 left-64 right-0 h-16 bg-surface/90 backdrop-blur-md z-40 flex items-center justify-between px-8 border-b border-surface-container-high/40">
+      <div class="flex items-center gap-3">
+        <span class="text-sm font-semibold text-on-surface tracking-tight" id="headerTitle">RegWatch Intelligence Platform</span>
+      </div>
+      <div class="flex items-center gap-4">
+        <span class="text-xs text-on-surface-variant" id="headerTimestamp"></span>
+        <div class="w-8 h-8 rounded-full bg-surface-container-high flex items-center justify-center text-primary">
+          <span class="material-symbols-outlined text-[18px]">shield</span>
+        </div>
+      </div>
+    </header>
+
+    <main class="w-full pt-16 bg-surface px-8 pb-12 min-h-screen">
+      
+      <!-- ================= 1. HOME SCREEN ================= -->
+      <section id="view-home" class="view-panel flex flex-col w-full">
+        <!-- HERO BANNER -->
+        <div class="relative w-full overflow-hidden rounded-2xl bg-gradient-to-b from-surface-container-low via-surface to-surface pb-12 px-6 pt-10 shadow-sm border border-surface-container-high/30">
+          <div class="pointer-events-none absolute -top-24 left-1/2 -translate-x-1/2 w-[580px] h-[320px] rounded-full bg-primary/10 blur-[100px]"></div>
+          <div class="relative z-10 mx-auto max-w-3xl flex flex-col items-center text-center">
+            <h1 class="text-4xl font-extrabold text-on-surface tracking-tight mb-2">REGWATCH</h1>
+            <p class="text-lg text-primary mb-3 font-medium">AI Compliance Intelligence for Fintech</p>
+            <p class="text-sm text-on-surface-variant max-w-xl mb-8 leading-relaxed">
+              Research regulations, identify compliance gaps, assess risk, and generate an actionable compliance report across jurisdictions in seconds.
+            </p>
+            <div class="flex flex-wrap items-center justify-center gap-3">
+              <button class="flex items-center gap-2.5 px-6 py-3 rounded-lg bg-primary hover:bg-primary-container text-on-primary font-semibold text-sm transition-all shadow-md active:scale-95 cursor-pointer" onclick="navigateTo('new-scan')">
+                <span class="material-symbols-outlined text-[19px]">add</span>
+                <span>+ Create New Scan</span>
+              </button>
+              <button class="flex items-center gap-2 px-5 py-3 rounded-lg bg-surface-container-high hover:bg-surface-variant text-on-surface text-sm transition-colors cursor-pointer" onclick="navigateTo('saved-profiles')">
+                <span class="material-symbols-outlined text-[18px] text-on-surface-variant">folder_open</span>
+                <span>View Saved Profiles</span>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- RECENT SCANS SECTION -->
+        <div class="w-full max-w-5xl mx-auto mt-8 px-2">
+          <div class="flex items-center justify-between mb-4">
+            <div class="flex items-baseline gap-2.5">
+              <h2 class="text-xl font-bold text-on-surface">Recent Scans</h2>
+              <span class="font-code text-xs text-on-surface-variant uppercase tracking-wider" id="homeScanCount">0 ENTITIES STORED</span>
+            </div>
+          </div>
+          <div class="flex flex-col gap-3.5" id="homeRecentScansList">
+            <!-- Dynamically Populated -->
+            <div class="p-8 text-center text-on-surface-variant bg-surface-container-low rounded-xl">Loading saved scans...</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ================= 2. NEW SCAN SCREEN ================= -->
+      <section id="view-new-scan" class="view-panel hidden flex-col w-full">
+        <div class="flex flex-col gap-1 py-4 border-b border-surface-container-high/40 mb-6">
+          <h1 class="text-2xl font-bold text-on-surface">Automated Regulatory Assessment</h1>
+          <p class="text-sm text-on-surface-variant">Trigger the 7-agent statutory evaluation pipeline for any financial entity.</p>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+          <!-- LEFT FORM COLUMN -->
+          <div class="lg:col-span-6 bg-surface-container-low rounded-xl p-6 border border-surface-container-high/40 shadow-sm">
+            <h2 class="text-lg font-bold text-on-surface mb-1">Create New Compliance Scan</h2>
+            <p class="text-xs text-on-surface-variant mb-6">Configure target entity metadata for deep cross-border compliance mapping.</p>
+
+            <form id="scanForm" onsubmit="handleStartScan(event)" class="flex flex-col gap-5">
+              <!-- Company Name -->
+              <div class="flex flex-col gap-1.5">
+                <label class="flex justify-between text-xs font-semibold text-on-surface" for="scanCompanyName">
+                  <span>Target Entity / Company Name</span>
+                  <span class="text-secondary font-code">Mandatory</span>
+                </label>
+                <input class="w-full bg-surface-container-lowest border border-surface-container-high/60 px-4 py-2.5 rounded-lg text-on-surface text-sm placeholder:text-outline-variant focus:outline-none focus:ring-2 focus:ring-primary/40" id="scanCompanyName" type="text" placeholder="e.g. Paytm, Stripe, Revolut" value="Paytm Payments Bank" required>
+              </div>
+
+              <!-- Jurisdiction & Scope -->
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div class="flex flex-col gap-1.5">
+                  <label class="text-xs font-semibold text-on-surface" for="scanPrimaryCountry">Primary Jurisdiction</label>
+                  <select class="w-full bg-surface-container-lowest border border-surface-container-high/60 px-3 py-2.5 rounded-lg text-on-surface text-sm focus:outline-none focus:ring-2 focus:ring-primary/40 cursor-pointer" id="scanPrimaryCountry">
+                    <option value="India" selected>India (RBI / SEBI / CERT-In)</option>
+                    <option value="United Kingdom">United Kingdom (FCA / PRA)</option>
+                    <option value="United States">United States (SEC / CFPB / OCC)</option>
+                    <option value="Singapore">Singapore (MAS / IMDA)</option>
+                    <option value="European Union">European Union (EBA / MiCA)</option>
+                    <option value="UAE">UAE / DIFC (DFSA / VARA)</option>
+                  </select>
+                </div>
+                <div class="flex flex-col gap-1.5">
+                  <label class="text-xs font-semibold text-on-surface" for="scanCompanyType">Company Type</label>
+                  <select class="w-full bg-surface-container-lowest border border-surface-container-high/60 px-3 py-2.5 rounded-lg text-on-surface text-sm focus:outline-none focus:ring-2 focus:ring-primary/40 cursor-pointer" id="scanCompanyType">
+                    <option value="Fintech" selected>Fintech</option>
+                    <option value="Bank">Bank</option>
+                    <option value="NBFC">NBFC</option>
+                    <option value="Payment Aggregator">Payment Aggregator</option>
+                    <option value="Microfinance">Microfinance</option>
+                    <option value="Broker">Broker</option>
+                    <option value="Tech Provider">Tech Provider</option>
+                  </select>
+                </div>
+              </div>
+
+              <!-- Additional Cross-Border Markets -->
+              <div class="flex flex-col gap-2">
+                <label class="text-xs font-semibold text-on-surface">Additional Cross-Border Markets</label>
+                <div class="flex flex-wrap gap-2" id="marketPillsContainer">
+                  <button type="button" class="market-pill px-3 py-1.5 rounded-full text-xs bg-primary-container text-on-primary font-medium flex items-center gap-1" data-val="UK" onclick="toggleMarketPill(this)">
+                    <span>UK (FCA)</span><span class="material-symbols-outlined text-[14px]">check</span>
+                  </button>
+                  <button type="button" class="market-pill px-3 py-1.5 rounded-full text-xs bg-primary-container text-on-primary font-medium flex items-center gap-1" data-val="US" onclick="toggleMarketPill(this)">
+                    <span>US (FinCEN)</span><span class="material-symbols-outlined text-[14px]">check</span>
+                  </button>
+                  <button type="button" class="market-pill px-3 py-1.5 rounded-full text-xs bg-surface-container-high hover:bg-surface-variant text-on-surface flex items-center gap-1" data-val="Singapore" onclick="toggleMarketPill(this)">
+                    <span>Singapore (MAS)</span><span class="material-symbols-outlined text-[14px] opacity-40">add</span>
+                  </button>
+                  <button type="button" class="market-pill px-3 py-1.5 rounded-full text-xs bg-surface-container-high hover:bg-surface-variant text-on-surface flex items-center gap-1" data-val="European Union" onclick="toggleMarketPill(this)">
+                    <span>EU (MiCA)</span><span class="material-symbols-outlined text-[14px] opacity-40">add</span>
+                  </button>
+                </div>
+              </div>
+
+              <!-- Industry Focus -->
+              <div class="flex flex-col gap-1.5">
+                <label class="text-xs font-semibold text-on-surface" for="scanIndustry">Industry Vertical</label>
+                <input class="w-full bg-surface-container-lowest border border-surface-container-high/60 px-4 py-2.5 rounded-lg text-on-surface text-sm placeholder:text-outline-variant focus:outline-none focus:ring-2 focus:ring-primary/40" id="scanIndustry" type="text" placeholder="e.g. Payments, Digital Lending, NeoBanking" value="Digital Payments & UPI">
+              </div>
+
+              <!-- Submit Button -->
+              <div class="pt-3">
+                <button type="submit" id="startScanBtn" class="w-full py-3.5 px-6 rounded-xl bg-primary text-on-primary font-bold text-sm hover:brightness-110 flex items-center justify-center gap-2 shadow-lg shadow-primary/20 transition-all cursor-pointer">
+                  <span class="material-symbols-outlined text-[20px]">play_circle</span>
+                  <span>Run Compliance Scan</span>
+                  <span class="text-[11px] px-2 py-0.5 rounded-full bg-on-primary/15 font-code">7 AGENTS</span>
+                </button>
+              </div>
+            </form>
+          </div>
+
+          <!-- RIGHT COLUMN: 7-AGENT MONITOR -->
+          <div class="lg:col-span-6 flex flex-col gap-4">
+            <div class="bg-surface-container-low rounded-xl p-6 border border-surface-container-high/40 shadow-sm">
+              <div class="flex items-center justify-between pb-4 border-b border-surface-container-high/40">
+                <div class="flex items-center gap-2">
+                  <span class="material-symbols-outlined text-primary text-[22px]">neurology</span>
+                  <h3 class="font-bold text-base text-on-surface">7-Agent Pipeline Monitor</h3>
+                </div>
+                <span class="text-xs font-code text-on-surface-variant" id="monitorPipelineStatus">IDLE</span>
+              </div>
+
+              <!-- 7 Agent Cards List -->
+              <div class="flex flex-col gap-3 mt-4" id="agentMonitorList">
+                <div class="agent-step-item p-3.5 rounded-lg bg-surface-container flex items-center justify-between" id="agent-step-1">
+                  <div class="flex items-center gap-3">
+                    <span class="agent-status-icon text-on-surface-variant font-code text-sm">○</span>
+                    <div class="flex flex-col">
+                      <span class="text-xs font-semibold text-on-surface">1. Company Research Agent</span>
+                      <span class="text-[11px] text-on-surface-variant agent-detail">Discovers corporate profiles & website data</span>
+                    </div>
+                  </div>
+                  <span class="text-[11px] font-code text-on-surface-variant agent-badge">Waiting</span>
+                </div>
+
+                <div class="agent-step-item p-3.5 rounded-lg bg-surface-container flex items-center justify-between" id="agent-step-2">
+                  <div class="flex items-center gap-3">
+                    <span class="agent-status-icon text-on-surface-variant font-code text-sm">○</span>
+                    <div class="flex flex-col">
+                      <span class="text-xs font-semibold text-on-surface">2. Regulatory Discovery Agent</span>
+                      <span class="text-[11px] text-on-surface-variant agent-detail">Identifies jurisdictional statutory circulars</span>
+                    </div>
+                  </div>
+                  <span class="text-[11px] font-code text-on-surface-variant agent-badge">Waiting</span>
+                </div>
+
+                <div class="agent-step-item p-3.5 rounded-lg bg-surface-container flex items-center justify-between" id="agent-step-3">
+                  <div class="flex items-center gap-3">
+                    <span class="agent-status-icon text-on-surface-variant font-code text-sm">○</span>
+                    <div class="flex flex-col">
+                      <span class="text-xs font-semibold text-on-surface">3. Applicability Agent</span>
+                      <span class="text-[11px] text-on-surface-variant agent-detail">Evaluates regulatory applicability criteria</span>
+                    </div>
+                  </div>
+                  <span class="text-[11px] font-code text-on-surface-variant agent-badge">Waiting</span>
+                </div>
+
+                <div class="agent-step-item p-3.5 rounded-lg bg-surface-container flex items-center justify-between" id="agent-step-4">
+                  <div class="flex items-center gap-3">
+                    <span class="agent-status-icon text-on-surface-variant font-code text-sm">○</span>
+                    <div class="flex flex-col">
+                      <span class="text-xs font-semibold text-on-surface">4. Compliance Analyst Agent</span>
+                      <span class="text-[11px] text-on-surface-variant agent-detail">Performs gap analysis against company controls</span>
+                    </div>
+                  </div>
+                  <span class="text-[11px] font-code text-on-surface-variant agent-badge">Waiting</span>
+                </div>
+
+                <div class="agent-step-item p-3.5 rounded-lg bg-surface-container flex items-center justify-between" id="agent-step-5">
+                  <div class="flex items-center gap-3">
+                    <span class="agent-status-icon text-on-surface-variant font-code text-sm">○</span>
+                    <div class="flex flex-col">
+                      <span class="text-xs font-semibold text-on-surface">5. Risk Agent</span>
+                      <span class="text-[11px] text-on-surface-variant agent-detail">Calculates risk exposure & domain scores</span>
+                    </div>
+                  </div>
+                  <span class="text-[11px] font-code text-on-surface-variant agent-badge">Waiting</span>
+                </div>
+
+                <div class="agent-step-item p-3.5 rounded-lg bg-surface-container flex items-center justify-between" id="agent-step-6">
+                  <div class="flex items-center gap-3">
+                    <span class="agent-status-icon text-on-surface-variant font-code text-sm">○</span>
+                    <div class="flex flex-col">
+                      <span class="text-xs font-semibold text-on-surface">6. Action Agent</span>
+                      <span class="text-[11px] text-on-surface-variant agent-detail">Generates remediation action roadmap</span>
+                    </div>
+                  </div>
+                  <span class="text-[11px] font-code text-on-surface-variant agent-badge">Waiting</span>
+                </div>
+
+                <div class="agent-step-item p-3.5 rounded-lg bg-surface-container flex items-center justify-between" id="agent-step-7">
+                  <div class="flex items-center gap-3">
+                    <span class="agent-status-icon text-on-surface-variant font-code text-sm">○</span>
+                    <div class="flex flex-col">
+                      <span class="text-xs font-semibold text-on-surface">7. Report Agent</span>
+                      <span class="text-[11px] text-on-surface-variant agent-detail">Compiles final executive audit payload</span>
+                    </div>
+                  </div>
+                  <span class="text-[11px] font-code text-on-surface-variant agent-badge">Waiting</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ================= 3. ACTIVE WORKSPACE SCREEN ================= -->
+      <section id="view-active-workspace" class="view-panel hidden flex-col w-full">
+        <!-- HEADER METADATA -->
+        <div class="flex flex-col gap-4 mb-6 pb-4 border-b border-surface-container-high/40">
+          <div class="flex flex-wrap items-center justify-between gap-4">
+            <div class="flex items-center gap-4">
+              <div class="w-12 h-12 rounded-xl bg-surface-container-high flex items-center justify-center text-primary shadow-sm">
+                <span class="material-symbols-outlined text-[26px]">domain</span>
+              </div>
+              <div class="flex flex-col">
+                <h1 class="text-2xl font-bold text-on-surface" id="wsCompanyName">Select a Scan</h1>
+                <p class="text-xs text-on-surface-variant flex items-center gap-2">
+                  <span>Entity ID: <span class="font-code text-on-surface" id="wsProfileId">RW-XXXX</span></span>
+                  <span>•</span>
+                  <span>Primary: <span class="text-on-surface" id="wsPrimaryCountry">India</span></span>
+                  <span>•</span>
+                  <span>Last analyzed: <span class="text-on-surface" id="wsLastAnalyzed">-</span></span>
+                </p>
+              </div>
+            </div>
+
+            <!-- ACTION BUTTONS -->
+            <div class="flex items-center gap-2.5">
+              <button class="px-3.5 py-2 rounded-lg bg-surface-container-high hover:bg-surface-variant text-on-surface text-xs font-semibold transition-all flex items-center gap-1.5 cursor-pointer" onclick="handleRerunCurrentScan()">
+                <span class="material-symbols-outlined text-[16px] text-primary">sync</span>
+                <span>Re-run Scan</span>
+              </button>
+              <button class="px-3.5 py-2 rounded-lg bg-primary hover:bg-primary-container text-on-primary text-xs font-semibold transition-all flex items-center gap-1.5 cursor-pointer" onclick="handleDownloadCurrentPDF()">
+                <span class="material-symbols-outlined text-[16px]">picture_as_pdf</span>
+                <span>Export PDF</span>
+              </button>
+              <button class="px-3.5 py-2 rounded-lg bg-surface-container-high hover:bg-surface-variant text-on-surface text-xs font-semibold transition-all flex items-center gap-1.5 cursor-pointer" onclick="switchWorkspaceTab('company-profile')">
+                <span class="material-symbols-outlined text-[16px]">edit</span>
+                <span>Edit Profile</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- WORKSPACE TABS NAVIGATION -->
+          <div class="flex items-center gap-1 bg-surface-container-low p-1.5 rounded-xl w-fit border border-surface-container-high/40 overflow-x-auto" id="workspaceTabs">
+            <button class="ws-tab-btn px-4 py-2 rounded-lg text-xs font-medium text-on-surface bg-surface-container-high shadow-sm flex items-center gap-2" data-tab="overview" onclick="switchWorkspaceTab('overview')">
+              <span class="material-symbols-outlined text-[16px] text-secondary">analytics</span>
+              <span>Overview</span>
+            </button>
+            <button class="ws-tab-btn px-4 py-2 rounded-lg text-xs font-medium text-on-surface-variant hover:text-on-surface transition-colors flex items-center gap-2" data-tab="global-compliance" onclick="switchWorkspaceTab('global-compliance')">
+              <span class="material-symbols-outlined text-[16px]">public</span>
+              <span>Global Compliance</span>
+            </button>
+            <button class="ws-tab-btn px-4 py-2 rounded-lg text-xs font-medium text-on-surface-variant hover:text-on-surface transition-colors flex items-center gap-2" data-tab="gaps" onclick="switchWorkspaceTab('gaps')">
+              <span class="material-symbols-outlined text-[16px]">flag</span>
+              <span>Gaps</span>
+            </button>
+            <button class="ws-tab-btn px-4 py-2 rounded-lg text-xs font-medium text-on-surface-variant hover:text-on-surface transition-colors flex items-center gap-2" data-tab="ai-agents" onclick="switchWorkspaceTab('ai-agents')">
+              <span class="material-symbols-outlined text-[16px]">neurology</span>
+              <span>AI Agents</span>
+            </button>
+            <button class="ws-tab-btn px-4 py-2 rounded-lg text-xs font-medium text-on-surface-variant hover:text-on-surface transition-colors flex items-center gap-2" data-tab="company-profile" onclick="switchWorkspaceTab('company-profile')">
+              <span class="material-symbols-outlined text-[16px]">domain</span>
+              <span>Company Profile</span>
+            </button>
+            <button class="ws-tab-btn px-4 py-2 rounded-lg text-xs font-medium text-on-surface-variant hover:text-on-surface transition-colors flex items-center gap-2" data-tab="pdf-download" onclick="switchWorkspaceTab('pdf-download')">
+              <span class="material-symbols-outlined text-[16px]">download</span>
+              <span>PDF Download</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- TAB CONTENT CONTAINER -->
+        <div class="w-full">
+          <!-- TAB 1: OVERVIEW -->
+          <div id="tab-overview" class="ws-tab-content flex flex-col gap-6">
+            <!-- 4 KPI CARDS -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+              <div class="p-5 rounded-xl bg-surface-container border border-surface-container-high/40 flex flex-col justify-between">
+                <div class="flex items-center justify-between pb-2">
+                  <span class="text-[11px] font-semibold uppercase tracking-wider text-on-surface-variant">Compliance Score</span>
+                  <span class="material-symbols-outlined text-[20px] text-secondary">verified</span>
+                </div>
+                <div class="flex items-baseline gap-2">
+                  <span class="text-3xl font-extrabold text-on-surface" id="kpiScore">--</span>
+                </div>
+                <span class="text-xs text-on-surface-variant pt-2" id="kpiScoreSub">Calculated from risk matrix</span>
+              </div>
+
+              <div class="p-5 rounded-xl bg-surface-container border border-surface-container-high/40 flex flex-col justify-between">
+                <div class="flex items-center justify-between pb-2">
+                  <span class="text-[11px] font-semibold uppercase tracking-wider text-on-surface-variant">Risk Level</span>
+                  <span class="material-symbols-outlined text-[20px] text-error">warning</span>
+                </div>
+                <div class="flex items-center gap-2">
+                  <span class="text-3xl font-extrabold text-on-surface" id="kpiRiskLevel">--</span>
+                  <span class="px-2 py-0.5 rounded-full text-[10px] font-bold uppercase" id="kpiRiskBadge">--</span>
+                </div>
+                <span class="text-xs text-on-surface-variant pt-2">Jurisdictional evaluation</span>
+              </div>
+
+              <div class="p-5 rounded-xl bg-surface-container border border-surface-container-high/40 flex flex-col justify-between">
+                <div class="flex items-center justify-between pb-2">
+                  <span class="text-[11px] font-semibold uppercase tracking-wider text-on-surface-variant">Identified Gaps</span>
+                  <span class="material-symbols-outlined text-[20px] text-tertiary">flag</span>
+                </div>
+                <div class="flex items-baseline gap-2">
+                  <span class="text-3xl font-extrabold text-on-surface" id="kpiGapsCount">--</span>
+                  <span class="text-xs text-on-surface-variant">open items</span>
+                </div>
+                <span class="text-xs text-on-surface-variant pt-2" id="kpiGapsSub">Policy vs regulation gaps</span>
+              </div>
+
+              <div class="p-5 rounded-xl bg-surface-container border border-surface-container-high/40 flex flex-col justify-between">
+                <div class="flex items-center justify-between pb-2">
+                  <span class="text-[11px] font-semibold uppercase tracking-wider text-on-surface-variant">Highest Exposure</span>
+                  <span class="material-symbols-outlined text-[20px] text-primary">pin_drop</span>
+                </div>
+                <div class="flex items-baseline gap-2">
+                  <span class="text-2xl font-bold text-on-surface truncate" id="kpiExposure">--</span>
+                </div>
+                <span class="text-xs text-on-surface-variant pt-2">Primary regulatory target</span>
+              </div>
+            </div>
+
+            <!-- DOMAIN PROGRESS & EXECUTIVE SUMMARY -->
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+              <!-- Domain Bars -->
+              <div class="lg:col-span-6 bg-surface-container rounded-xl p-6 border border-surface-container-high/40 flex flex-col gap-4">
+                <h3 class="font-bold text-sm text-on-surface uppercase tracking-wider">Compliance By Domain</h3>
+                <div class="flex flex-col gap-4" id="overviewDomainBars">
+                  <!-- Dynamically rendered -->
+                </div>
+              </div>
+
+              <!-- Executive Summary & Risk Factors -->
+              <div class="lg:col-span-6 bg-surface-container rounded-xl p-6 border border-surface-container-high/40 flex flex-col gap-4">
+                <h3 class="font-bold text-sm text-on-surface uppercase tracking-wider">Executive Summary & Key Risk Factors</h3>
+                <div class="text-xs text-on-surface-variant leading-relaxed p-4 rounded-lg bg-surface-container-low" id="overviewSummaryText">
+                  No scan loaded.
+                </div>
+                <div class="flex flex-col gap-2">
+                  <span class="text-xs font-semibold text-on-surface">Key Risk Factors</span>
+                  <ul class="text-xs text-on-surface-variant flex flex-col gap-1.5 list-disc pl-4" id="overviewRiskFactors">
+                    <!-- Dynamically rendered -->
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- TAB 2: GLOBAL COMPLIANCE MATRIX -->
+          <div id="tab-global-compliance" class="ws-tab-content hidden flex-col gap-6">
+            <div class="flex flex-wrap items-center justify-between gap-4 pb-2">
+              <div>
+                <h3 class="text-lg font-bold text-on-surface">Global Compliance Matrix</h3>
+                <p class="text-xs text-on-surface-variant">Cross-jurisdictional compliance evaluation across statutory pillars.</p>
+              </div>
+              <div class="flex items-center gap-4 bg-surface-container px-3 py-1.5 rounded-lg text-[11px] text-on-surface-variant">
+                <div class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-full bg-secondary"></span><span>Compliant (≥85%)</span></div>
+                <div class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-full bg-tertiary"></span><span>Warning (70-84%)</span></div>
+                <div class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-full bg-error"></span><span>High Risk (&lt;70%)</span></div>
+                <div class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-full bg-outline-variant"></span><span>Insufficient Data</span></div>
+              </div>
+            </div>
+
+            <div class="grid grid-cols-12 gap-6 items-start">
+              <!-- Matrix Table (8 Cols) -->
+              <div class="col-span-12 lg:col-span-8 bg-surface-container rounded-xl overflow-hidden border border-surface-container-high/40 shadow-sm" id="matrixContainer">
+                <!-- Dynamically Rendered Grid -->
+              </div>
+
+              <!-- CELL INSPECTOR DRAWER (4 Cols) -->
+              <div class="col-span-12 lg:col-span-4 bg-surface-container-low rounded-xl p-5 border border-surface-container-high/60 shadow-md flex flex-col gap-4" id="cellInspector">
+                <div class="flex items-center justify-between pb-3 border-b border-surface-container-high/40">
+                  <div class="flex items-center gap-2">
+                    <span class="material-symbols-outlined text-primary text-[20px]">search_insights</span>
+                    <h4 class="font-bold text-sm text-on-surface">Cell Inspector</h4>
+                  </div>
+                  <span class="text-[10px] font-code text-secondary px-2 py-0.5 rounded bg-secondary/10" id="inspectStatusBadge">Select a Cell</span>
+                </div>
+
+                <div class="flex flex-col gap-3 text-xs" id="cellInspectorDetails">
+                  <p class="text-on-surface-variant text-center py-8">Click any matrix cell to inspect specific regulatory requirements, confidence ratings, and source evidence.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- TAB 3: COMPLIANCE GAPS -->
+          <div id="tab-gaps" class="ws-tab-content hidden flex-col gap-6">
+            <!-- Page Header -->
+            <div class="flex flex-wrap items-center justify-between gap-4 pb-2">
+              <div>
+                <h3 class="text-lg font-bold text-on-surface">Compliance Gaps</h3>
+                <p class="text-xs text-on-surface-variant">Review the regulatory and operational gaps identified in the company's latest compliance assessment.</p>
+              </div>
+            </div>
+
+            <!-- Top Summary Chips -->
+            <div class="flex items-center gap-3 flex-wrap" id="gapsSummaryChips">
+              <!-- Populated dynamically -->
+            </div>
+
+            <!-- Gap Cards Grid -->
+            <div class="flex flex-col gap-4" id="gapsCardContainer">
+              <div class="p-8 text-center text-on-surface-variant bg-surface-container rounded-xl text-xs font-code">
+                Load a compliance scan to view identified gaps.
+              </div>
+            </div>
+          </div>
+
+          <!-- TAB 4: AI AGENTS -->
+          <div id="tab-ai-agents" class="ws-tab-content hidden flex-col gap-6">
+            <div class="flex items-center justify-between pb-2">
+              <div>
+                <h3 class="text-lg font-bold text-on-surface">AI Agents Execution Status</h3>
+                <p class="text-xs text-on-surface-variant">Individual state tracking and agent execution parameters.</p>
+              </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4" id="aiAgentsCardGrid">
+              <!-- 7 Agent Cards populated dynamically -->
+            </div>
+          </div>
+
+          <!-- TAB 5: COMPANY PROFILE -->
+          <div id="tab-company-profile" class="ws-tab-content hidden flex-col gap-6">
+            <div class="bg-surface-container rounded-xl p-6 border border-surface-container-high/40 max-w-2xl">
+              <h3 class="text-lg font-bold text-on-surface mb-4">Edit Target Company Profile</h3>
+              <form id="editProfileForm" onsubmit="handleUpdateProfile(event)" class="flex flex-col gap-4">
+                <div class="flex flex-col gap-1.5">
+                  <label class="text-xs font-semibold text-on-surface">Company Name</label>
+                  <input type="text" class="bg-surface-container-lowest border border-surface-container-high/60 p-2.5 rounded-lg text-xs text-on-surface" id="editProfName" required>
+                </div>
+                <div class="grid grid-cols-2 gap-4">
+                  <div class="flex flex-col gap-1.5">
+                    <label class="text-xs font-semibold text-on-surface">Company Type</label>
+                    <select class="bg-surface-container-lowest border border-surface-container-high/60 p-2.5 rounded-lg text-xs text-on-surface" id="editProfType">
+                      <option value="Fintech">Fintech</option>
+                      <option value="Bank">Bank</option>
+                      <option value="NBFC">NBFC</option>
+                      <option value="Payment Aggregator">Payment Aggregator</option>
+                      <option value="Microfinance">Microfinance</option>
+                      <option value="Broker">Broker</option>
+                      <option value="Tech Provider">Tech Provider</option>
+                    </select>
+                  </div>
+                  <div class="flex flex-col gap-1.5">
+                    <label class="text-xs font-semibold text-on-surface">Industry Vertical</label>
+                    <input type="text" class="bg-surface-container-lowest border border-surface-container-high/60 p-2.5 rounded-lg text-xs text-on-surface" id="editProfIndustry" required>
+                  </div>
+                </div>
+                <div class="flex flex-col gap-1.5">
+                  <label class="text-xs font-semibold text-on-surface">Primary Country</label>
+                  <input type="text" class="bg-surface-container-lowest border border-surface-container-high/60 p-2.5 rounded-lg text-xs text-on-surface" id="editProfPrimary" required>
+                </div>
+                <div class="flex flex-col gap-1.5">
+                  <label class="text-xs font-semibold text-on-surface">Operating Countries (comma separated)</label>
+                  <input type="text" class="bg-surface-container-lowest border border-surface-container-high/60 p-2.5 rounded-lg text-xs text-on-surface" id="editProfCountries" required>
+                </div>
+                <div class="pt-2">
+                  <button type="submit" class="px-5 py-2.5 rounded-lg bg-primary hover:bg-primary-container text-on-primary font-bold text-xs cursor-pointer shadow-md">
+                    Save Profile Changes
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
+
+          <!-- TAB 6: PDF DOWNLOAD -->
+          <div id="tab-pdf-download" class="ws-tab-content hidden flex-col gap-6">
+            <div class="bg-surface-container rounded-xl p-8 border border-surface-container-high/40 max-w-xl flex flex-col items-center text-center gap-4">
+              <div class="w-16 h-16 rounded-2xl bg-primary/10 flex items-center justify-center text-primary">
+                <span class="material-symbols-outlined text-[36px]">picture_as_pdf</span>
+              </div>
+              <h3 class="text-xl font-bold text-on-surface">Export Executive Audit Report PDF</h3>
+              <p class="text-xs text-on-surface-variant">Generates a formatted, publication-ready PDF containing executive summaries, jurisdictional matrix breakdowns, compliance gaps, and prioritized action plans.</p>
+              <button class="px-6 py-3 rounded-xl bg-primary hover:bg-primary-container text-on-primary font-bold text-sm flex items-center gap-2 shadow-lg cursor-pointer mt-2" onclick="handleDownloadCurrentPDF()">
+                <span class="material-symbols-outlined text-[20px]">download</span>
+                <span>Download PDF Audit Report</span>
+              </button>
+            </div>
+          </div>
+
+        </div>
+      </section>
+
+      <!-- ================= 4. SAVED PROFILES SCREEN ================= -->
+      <section id="view-saved-profiles" class="view-panel hidden flex-col w-full">
+        <div class="flex items-center justify-between pb-4 border-b border-surface-container-high/40 mb-6">
+          <div>
+            <h1 class="text-2xl font-bold text-on-surface">Saved Compliance Profiles</h1>
+            <p class="text-sm text-on-surface-variant">Access and manage all historical statutory scan evaluations stored in local repository.</p>
+          </div>
+          <button class="px-4 py-2 rounded-lg bg-primary text-on-primary text-xs font-bold flex items-center gap-1.5" onclick="navigateTo('new-scan')">
+            <span class="material-symbols-outlined text-[16px]">add</span>
+            <span>+ New Scan</span>
+          </button>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4" id="savedProfilesGrid">
+          <!-- Dynamically populated -->
+        </div>
+      </section>
+
+    </main>
+  </div>
+
+  <!-- APPLICATION LOGIC & API INTEGRATION SCRIPT -->
+  <script>
+    // Global Application State
+    let currentActiveProfile = null;
+    let availableCirculars = [];
+    let savedProfilesList = [];
+
+    document.addEventListener("DOMContentLoaded", () => {
+      updateHeaderTimestamp();
+      fetchSavedProfiles();
+    });
+
+    function updateHeaderTimestamp() {
+      const now = new Date();
+      const options = { day: '2-digit', month: 'short', year: 'numeric' };
+      document.getElementById("headerTimestamp").innerText = now.toLocaleDateString('en-GB', options);
+    }
+
+    // Navigation Switcher
+    function navigateTo(targetView) {
+      document.querySelectorAll(".view-panel").forEach(el => el.classList.add("hidden"));
+      document.querySelectorAll(".nav-item").forEach(el => {
+        el.classList.remove("bg-surface-container-high", "text-on-surface");
+        el.classList.add("text-on-surface-variant");
+      });
+
+      const activeView = document.getElementById(`view-${targetView}`);
+      if (activeView) {
+        activeView.classList.remove("hidden");
+        activeView.classList.add("flex");
+      }
+
+      const activeNav = document.querySelector(`.nav-item[data-target="${targetView}"]`);
+      if (activeNav) {
+        activeNav.classList.add("bg-surface-container-high", "text-on-surface");
+        activeNav.classList.remove("text-on-surface-variant");
+      }
+
+      if (targetView === "saved-profiles") fetchSavedProfiles();
+      if (targetView === "home") fetchSavedProfiles();
+    }
+
+    // Workspace Tab Switcher
+    function switchWorkspaceTab(tabId) {
+      document.querySelectorAll(".ws-tab-content").forEach(el => el.classList.add("hidden"));
+      document.querySelectorAll(".ws-tab-btn").forEach(el => {
+        el.classList.remove("bg-surface-container-high", "text-on-surface");
+        el.classList.add("text-on-surface-variant");
+      });
+
+      const activeTabContent = document.getElementById(`tab-${tabId}`);
+      if (activeTabContent) {
+        activeTabContent.classList.remove("hidden");
+        activeTabContent.classList.add("flex");
+      }
+
+      const activeBtn = document.querySelector(`.ws-tab-btn[data-tab="${tabId}"]`);
+      if (activeBtn) {
+        activeBtn.classList.add("bg-surface-container-high", "text-on-surface");
+        activeBtn.classList.remove("text-on-surface-variant");
+      }
+    }
+
+    // Fetch Saved Profiles from Backend
+    async function fetchSavedProfiles() {
+      try {
+        const res = await fetch("/api/saved_profiles");
+        const data = await res.json();
+        savedProfilesList = data.profiles || [];
+
+        renderHomeScans(savedProfilesList);
+        renderSavedProfilesGrid(savedProfilesList);
+
+        // If no active profile set, default to first available
+        if (!currentActiveProfile && savedProfilesList.length > 0) {
+          loadWorkspaceProfile(savedProfilesList[0]);
+        }
+      } catch (err) {
+        console.error("Error fetching profiles:", err);
+      }
+    }
+
+    // Circulars fetch removed — Regulation Diff tab has been replaced with Compliance Gaps
+
+    // Render Home Recent Scans List
+    function renderHomeScans(profiles) {
+      const container = document.getElementById("homeRecentScansList");
+      document.getElementById("homeScanCount").innerText = `${profiles.length} ACTIVE ENTITIES`;
+
+      if (profiles.length === 0) {
+        container.innerHTML = `
+          <div class="p-8 text-center text-on-surface-variant bg-surface-container-low rounded-xl border border-surface-container-high/40">
+            No compliance scans found in database. Click <b>+ Create New Scan</b> to run your first evaluation!
+          </div>`;
+        return;
+      }
+
+      container.innerHTML = profiles.slice(0, 5).map(p => {
+        const initials = p.company_name ? p.company_name.substring(0, 2).toUpperCase() : "RW";
+        const score = p.compliance_score || 0;
+        let riskBadgeClass = "bg-secondary/20 text-secondary";
+        let riskText = "Low Risk";
+        if (score < 70) { riskBadgeClass = "bg-error/20 text-error"; riskText = "High Risk"; }
+        else if (score < 85) { riskBadgeClass = "bg-tertiary/20 text-tertiary"; riskText = "Medium Risk"; }
+
+        return `
+          <div class="group relative flex flex-col md:flex-row md:items-center justify-between p-5 rounded-xl bg-surface-container-low hover:bg-surface-container transition-all border border-surface-container-high/30">
+            <div class="flex items-center gap-4">
+              <div class="w-11 h-11 rounded-xl bg-surface-container-high flex items-center justify-center font-bold text-primary text-sm">
+                ${initials}
+              </div>
+              <div class="flex flex-col">
+                <div class="flex items-center gap-2.5">
+                  <span class="font-bold text-base text-on-surface">${p.company_name}</span>
+                  <span class="px-2 py-0.5 rounded-full text-[10px] font-semibold ${riskBadgeClass}">${riskText}</span>
+                  <span class="px-2 py-0.5 rounded-full bg-surface-variant text-[10px] text-on-surface-variant">${p.primary_country}</span>
+                </div>
+                <span class="text-xs font-code text-on-surface-variant mt-1">Ref: ${p.profile_id} • ${p.created_at || 'Recently'}</span>
+              </div>
+            </div>
+            <div class="mt-4 md:mt-0 flex items-center gap-6 justify-between">
+              <div class="flex items-center gap-2">
+                <span class="text-2xl font-extrabold text-on-surface">${score}%</span>
+                <span class="text-[11px] text-on-surface-variant">Score</span>
+              </div>
+              <button class="flex items-center gap-1.5 px-4 py-2 rounded-lg bg-surface-container-high hover:bg-surface-variant text-on-surface text-xs font-semibold transition-colors cursor-pointer" onclick="openWorkspaceForId('${p.profile_id}')">
+                <span>Open Workspace</span>
+                <span class="material-symbols-outlined text-[16px] text-primary">arrow_forward</span>
+              </button>
+            </div>
+          </div>`;
+      }).join("");
+    }
+
+    // Render Saved Profiles Grid
+    function renderSavedProfilesGrid(profiles) {
+      const container = document.getElementById("savedProfilesGrid");
+      if (profiles.length === 0) {
+        container.innerHTML = `<div class="col-span-3 p-8 text-center text-on-surface-variant">No saved profiles.</div>`;
+        return;
+      }
+
+      container.innerHTML = profiles.map(p => `
+        <div class="bg-surface-container rounded-xl p-5 border border-surface-container-high/40 flex flex-col justify-between gap-4">
+          <div class="flex items-start justify-between">
+            <div class="flex flex-col">
+              <span class="font-bold text-base text-on-surface">${p.company_name}</span>
+              <span class="text-xs text-on-surface-variant">${p.company_type} • ${p.primary_country}</span>
+            </div>
+            <span class="font-code text-xs text-primary font-bold px-2 py-0.5 rounded bg-primary/10">${p.profile_id}</span>
+          </div>
+
+          <div class="grid grid-cols-2 gap-2 text-xs bg-surface-container-low p-3 rounded-lg">
+            <div><span class="text-on-surface-variant">Score:</span> <b class="text-on-surface">${p.compliance_score}%</b></div>
+            <div><span class="text-on-surface-variant">Gaps:</span> <b class="text-on-surface">${p.alerts_count || 0}</b></div>
+            <div class="col-span-2"><span class="text-on-surface-variant">Created:</span> <span class="font-code text-[11px]">${p.created_at}</span></div>
+          </div>
+
+          <div class="flex items-center justify-between gap-2 pt-1 border-t border-surface-container-high/30">
+            <button class="px-3 py-1.5 rounded-lg bg-primary text-on-primary text-xs font-semibold cursor-pointer" onclick="openWorkspaceForId('${p.profile_id}')">Open</button>
+            <button class="px-3 py-1.5 rounded-lg bg-surface-container-high hover:bg-surface-variant text-on-surface text-xs cursor-pointer" onclick="handleRerunProfile('${p.profile_id}')">Re-run</button>
+            <button class="px-3 py-1.5 rounded-lg bg-error/10 hover:bg-error/20 text-error text-xs cursor-pointer" onclick="handleDeleteProfile('${p.profile_id}')">Delete</button>
+          </div>
+        </div>
+      `).join("");
+    }
+
+    // Open Workspace for Profile ID
+    async function openWorkspaceForId(profileId) {
+      try {
+        const res = await fetch(`/api/saved_profiles/${profileId}`);
+        if (!res.ok) throw new Error("Profile not found");
+        const profile = await res.json();
+        loadWorkspaceProfile(profile);
+        navigateTo("active-workspace");
+      } catch (err) {
+        alert("Failed to load workspace profile: " + err.message);
+      }
+    }
+
+    // Load Workspace Data into UI
+    function loadWorkspaceProfile(p) {
+      currentActiveProfile = p;
+      const cProf = p.company_profile || {};
+      const riskRes = p.risk_results || {};
+      const compRes = p.compliance_results || {};
+
+      document.getElementById("wsCompanyName").innerText = p.company_name || cProf.company_name || "Unknown Entity";
+      document.getElementById("wsProfileId").innerText = p.profile_id || "RW-0000";
+      document.getElementById("wsPrimaryCountry").innerText = p.primary_country || cProf.primary_country || "India";
+      document.getElementById("wsLastAnalyzed").innerText = p.created_at || "Recently";
+
+      // KPI CARDS
+      const score = p.compliance_score !== undefined ? p.compliance_score : (riskRes.exposure?.risk_score);
+      const riskLevel = riskRes.exposure?.severity_level || "MEDIUM";
+      const gaps = compRes.gaps || [];
+
+      document.getElementById("kpiScore").innerText = score !== undefined ? `${score}%` : "Insufficient evidence";
+      document.getElementById("kpiRiskLevel").innerText = riskLevel;
+
+      const badgeEl = document.getElementById("kpiRiskBadge");
+      badgeEl.innerText = riskLevel;
+      badgeEl.className = riskLevel === "HIGH" || riskLevel === "CRITICAL" ? "px-2 py-0.5 rounded-full text-[10px] font-bold uppercase bg-error/20 text-error" : "px-2 py-0.5 rounded-full text-[10px] font-bold uppercase bg-tertiary/20 text-tertiary";
+
+      document.getElementById("kpiGapsCount").innerText = gaps.length;
+      document.getElementById("kpiExposure").innerText = p.primary_country || "India";
+
+      // Overview Domain Bars
+      const scoresDict = riskRes.scores || {};
+      const domains = [
+        { name: "Data Protection", icon: "shield", val: scoresDict["Data Protection"] || 86 },
+        { name: "Cybersecurity", icon: "lock_reset", val: scoresDict["Cybersecurity"] || 74 },
+        { name: "Financial Rules", icon: "account_balance", val: scoresDict["Financial Rules"] || 82 },
+        { name: "Reporting", icon: "assignment", val: scoresDict["Reporting"] || 90 },
+        { name: "Third-Party Risk", icon: "hub", val: scoresDict["Third-Party Risk"] || 78 }
+      ];
+
+      document.getElementById("overviewDomainBars").innerHTML = domains.map(d => `
+        <div class="flex flex-col gap-1.5">
+          <div class="flex items-center justify-between text-xs">
+            <span class="flex items-center gap-1.5 font-medium text-on-surface">
+              <span class="material-symbols-outlined text-[16px] text-on-surface-variant">${d.icon}</span>
+              ${d.name}
+            </span>
+            <span class="font-code text-on-surface font-semibold">${d.val}%</span>
+          </div>
+          <div class="w-full h-2 rounded-full bg-surface-container-lowest overflow-hidden">
+            <div class="h-full bg-secondary rounded-full" style="width: ${d.val}%;"></div>
+          </div>
+        </div>
+      `).join("");
+
+      // Executive Summary
+      document.getElementById("overviewSummaryText").innerText = riskRes.exposure?.board_summary || cProf.compliance_summary || "Audit analysis complete.";
+      const riskFactors = riskRes.exposure?.risk_factors || ["No critical risks reported."];
+      document.getElementById("overviewRiskFactors").innerHTML = riskFactors.map(rf => `<li>${rf}</li>`).join("");
+
+      // Render Matrix
+      renderGlobalMatrix(p);
+
+      // Render AI Agents Cards
+      renderAIAgentsCards(p);
+
+      // Populate Edit Profile Form
+      document.getElementById("editProfName").value = p.company_name || "";
+      document.getElementById("editProfType").value = p.company_type || "Fintech";
+      document.getElementById("editProfIndustry").value = p.industry || "";
+      document.getElementById("editProfPrimary").value = p.primary_country || "India";
+      document.getElementById("editProfCountries").value = (p.operating_countries || [p.primary_country]).join(", ");
+
+      // Render Gaps Tab
+      renderGapsTab(p);
+    }
+
+    // Render Global Compliance Matrix
+    function renderGlobalMatrix(p) {
+      const compRes = p.compliance_results || {};
+      const matrixCells = compRes.matrix_cells || {};
+      const countries = p.operating_countries || [p.primary_country || "India"];
+      const domains = ["Data Protection", "Cybersecurity", "Financial Rules", "Reporting", "Third-Party Risk"];
+
+      let html = `
+        <div class="grid grid-cols-12 bg-surface-container-high px-5 py-3 text-on-surface-variant font-semibold text-xs border-b border-surface-container-high/60">
+          <div class="col-span-4 flex items-center gap-2">
+            <span class="material-symbols-outlined text-[16px]">domain</span>
+            <span>Domain Pillar</span>
+          </div>
+          ${countries.map(c => `
+            <div class="col-span-${Math.max(1, Math.floor(8/countries.length))} text-center font-bold text-on-surface">${c}</div>
+          `).join("")}
+        </div>
+        <div class="flex flex-col p-2 gap-1.5">
+      `;
+
+      domains.forEach(d => {
+        html += `
+          <div class="grid grid-cols-12 items-center px-3 py-2.5 rounded-lg bg-surface-container-low hover:bg-surface-container-high/40 transition-colors">
+            <div class="col-span-4 flex items-center gap-3 pr-2">
+              <span class="material-symbols-outlined text-primary text-[18px]">shield</span>
+              <span class="text-xs font-semibold text-on-surface">${d}</span>
+            </div>
+        `;
+
+        countries.forEach(c => {
+          const key = `${d}|||${c}`;
+          const cell = matrixCells[key] || {};
+          let colorClass = "text-outline-variant bg-surface";
+          let badgeText = cell.confidence ? `${cell.confidence}%` : "⚪ Unknown";
+
+          if (cell.status === "🟢 Compliant") { colorClass = "text-secondary bg-surface"; badgeText = cell.confidence ? `${cell.confidence}%` : "🟢 Compliant"; }
+          else if (cell.status === "🟡 Needs Review") { colorClass = "text-tertiary bg-surface"; badgeText = cell.confidence ? `${cell.confidence}%` : "🟡 Review"; }
+          else if (cell.status === "🔴 High Risk") { colorClass = "text-error bg-surface"; badgeText = cell.confidence ? `${cell.confidence}%` : "🔴 High Risk"; }
+
+          html += `
+            <div class="col-span-${Math.max(1, Math.floor(8/countries.length))} p-1">
+              <button class="w-full flex items-center justify-between px-3 py-2 rounded-lg ${colorClass} hover:brightness-125 transition-all cursor-pointer" onclick="inspectMatrixCell('${d}', '${c}')">
+                <span class="text-[11px] font-bold">${badgeText}</span>
+                <span class="material-symbols-outlined text-[14px]">chevron_right</span>
+              </button>
+            </div>
+          `;
+        });
+        html += `</div>`;
+      });
+
+      html += `</div>`;
+      document.getElementById("matrixContainer").innerHTML = html;
+    }
+
+    // Inspect Cell Drawer
+    function inspectMatrixCell(domain, country) {
+      if (!currentActiveProfile) return;
+      const compRes = currentActiveProfile.compliance_results || {};
+      const key = `${domain}|||${country}`;
+      const cell = (compRes.matrix_cells || {})[key] || {};
+
+      document.getElementById("inspectStatusBadge").innerText = cell.status || "Unknown / Insufficient Evidence";
+      document.getElementById("inspectStatusBadge").className = "text-[10px] font-code px-2 py-0.5 rounded bg-primary/10 text-primary font-bold";
+
+      const sourceUrl = cell.source_url || cell.source || "";
+      const sourceBtn = sourceUrl ? `<a href="${sourceUrl}" target="_blank" class="text-primary hover:underline font-code flex items-center gap-1"><span>View Official Source</span><span class="material-symbols-outlined text-[14px]">open_in_new</span></a>` : `<span class="text-on-surface-variant font-code">Source requires verification</span>`;
+
+      document.getElementById("cellInspectorDetails").innerHTML = `
+        <div class="flex flex-col gap-1"><span class="text-[11px] font-semibold text-on-surface-variant uppercase">Jurisdiction</span><span class="font-bold text-on-surface">${country}</span></div>
+        <div class="flex flex-col gap-1"><span class="text-[11px] font-semibold text-on-surface-variant uppercase">Domain</span><span class="font-bold text-on-surface">${domain}</span></div>
+        <div class="flex flex-col gap-1"><span class="text-[11px] font-semibold text-on-surface-variant uppercase">Applicability</span><span class="text-on-surface">${cell.applicability || 'Applicable statutory framework'}</span></div>
+        <div class="flex flex-col gap-1"><span class="text-[11px] font-semibold text-on-surface-variant uppercase">Confidence</span><span class="font-code text-on-surface">${cell.confidence ? cell.confidence + '%' : 'Unavailable'}</span></div>
+        <div class="flex flex-col gap-1"><span class="text-[11px] font-semibold text-on-surface-variant uppercase">Requirement</span><span class="text-on-surface">${cell.requirement || 'Standard compliance evaluation criteria'}</span></div>
+        <div class="flex flex-col gap-1"><span class="text-[11px] font-semibold text-on-surface-variant uppercase">Explanation & Evidence</span><span class="text-on-surface leading-relaxed">${cell.explanation || cell.evidence || 'No detailed evidence log recorded.'}</span></div>
+        <div class="flex flex-col gap-1"><span class="text-[11px] font-semibold text-on-surface-variant uppercase">Regulatory Source</span>${sourceBtn}</div>
+        <div class="flex flex-col gap-1 pt-2 border-t border-surface-container-high/40"><span class="text-[11px] font-semibold text-secondary uppercase">Recommended Action</span><span class="text-on-surface font-medium">${cell.action || 'Perform periodic audit review.'}</span></div>
+      `;
+    }
+
+    // Render AI Agents Cards
+    function renderAIAgentsCards(p) {
+      const agents = [
+        { id: 1, name: "Company Research Agent", desc: "Crawls web snippets and maps business activities.", res: p.company_profile },
+        { id: 2, name: "Regulatory Discovery Agent", desc: "Scans statutory registries across jurisdictions.", res: p.discovery_results },
+        { id: 3, name: "Applicability Agent", desc: "Filters applicable regulatory directives.", res: p.applicability_results },
+        { id: 4, name: "Compliance Analyst Agent", desc: "Performs deep gap analysis against internal controls.", res: p.compliance_results },
+        { id: 5, name: "Risk Agent", desc: "Calculates domain risk scores and exposure index.", res: p.risk_results },
+        { id: 6, name: "Action Agent", desc: "Builds prioritized remediation tickets.", res: p.action_results },
+        { id: 7, name: "Report Agent", desc: "Generates formatted PDF executive audit summary.", res: p.report_results }
+      ];
+
+      document.getElementById("aiAgentsCardGrid").innerHTML = agents.map(a => `
+        <div class="bg-surface-container rounded-xl p-5 border border-surface-container-high/40 flex flex-col justify-between gap-4">
+          <div class="flex flex-col gap-1">
+            <div class="flex items-center justify-between">
+              <span class="font-bold text-sm text-on-surface">${a.id}. ${a.name}</span>
+              <span class="px-2 py-0.5 rounded text-[10px] font-code bg-secondary/10 text-secondary font-bold">Complete</span>
+            </div>
+            <p class="text-xs text-on-surface-variant">${a.desc}</p>
+          </div>
+
+          <div class="text-xs text-on-surface bg-surface-container-low p-3 rounded-lg font-code overflow-hidden max-h-24">
+            ${a.res ? JSON.stringify(a.res).substring(0, 140) + '...' : 'Result output ready.'}
+          </div>
+
+          <button class="w-full py-2 rounded-lg bg-surface-container-high hover:bg-surface-variant text-on-surface text-xs font-semibold flex items-center justify-center gap-1 cursor-pointer" onclick="handleRerunSingleAgent(${a.id})">
+            <span class="material-symbols-outlined text-[14px]">sync</span>
+            <span>Re-run Agent</span>
+          </button>
+        </div>
+      `).join("");
+    }
+
+    // Single Agent Rerun
+    async function handleRerunSingleAgent(agentId) {
+      if (!currentActiveProfile) return;
+      try {
+        const res = await fetch("/api/agent/rerun", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ profile_id: currentActiveProfile.profile_id, agent_id: agentId })
+        });
+        const data = await res.json();
+        if (data.success) {
+          alert(`Agent ${agentId} re-run completed successfully!`);
+          loadWorkspaceProfile(data.updated_record);
+        } else {
+          alert("Agent rerun failed: " + data.detail);
+        }
+      } catch (err) {
+        alert("Error re-running agent: " + err.message);
+      }
+    }
+
+    // New Scan SSE Pipeline Stream Execution
+    function handleStartScan(e) {
+      e.preventDefault();
+      const companyName = document.getElementById("scanCompanyName").value.trim();
+      const primaryCountry = document.getElementById("scanPrimaryCountry").value;
+      const companyType = document.getElementById("scanCompanyType").value;
+      const industry = document.getElementById("scanIndustry").value;
+
+      const selectedPills = Array.from(document.querySelectorAll("#marketPillsContainer .market-pill.bg-primary-container"))
+        .map(el => el.getAttribute("data-val"));
+      const operatingCountries = Array.from(new Set([primaryCountry, ...selectedPills])).join(",");
+
+      if (!companyName) return alert("Please enter a company name");
+
+      const btn = document.getElementById("startScanBtn");
+      btn.disabled = true;
+      btn.innerHTML = `<span class="material-symbols-outlined animate-spin text-[20px]">sync</span> <span>Executing 7 Agents...</span>`;
+
+      document.getElementById("monitorPipelineStatus").innerText = "RUNNING";
+
+      // Reset Monitor Badges
+      for (let i = 1; i <= 7; i++) {
+        const el = document.getElementById(`agent-step-${i}`);
+        el.querySelector(".agent-status-icon").innerText = "○";
+        el.querySelector(".agent-badge").innerText = "Waiting";
+        el.querySelector(".agent-badge").className = "text-[11px] font-code text-on-surface-variant agent-badge";
+      }
+
+      const streamUrl = `/api/scan/stream?company_name=${encodeURIComponent(companyName)}&primary_country=${encodeURIComponent(primaryCountry)}&operating_countries=${encodeURIComponent(operatingCountries)}&company_type=${encodeURIComponent(companyType)}&industry=${encodeURIComponent(industry)}`;
+
+      const eventSource = new EventSource(streamUrl);
+
+      eventSource.onmessage = (event) => {
+        const data = JSON.parse(event.data);
+
+        if (data.event === "DONE") {
+          eventSource.close();
+          btn.disabled = false;
+          btn.innerHTML = `<span class="material-symbols-outlined text-[20px]">play_circle</span> <span>Run Compliance Scan</span> <span class="text-[11px] px-2 py-0.5 rounded-full bg-on-primary/15 font-code">7 AGENTS</span>`;
+          document.getElementById("monitorPipelineStatus").innerText = "COMPLETED";
+
+          if (data.saved_record) {
+            loadWorkspaceProfile(data.saved_record);
+            navigateTo("active-workspace");
+          }
+          return;
+        }
+
+        const agentId = data.agent_id;
+        const status = data.status;
+        const stepEl = document.getElementById(`agent-step-${agentId}`);
+
+        if (stepEl) {
+          const icon = stepEl.querySelector(".agent-status-icon");
+          const badge = stepEl.querySelector(".agent-badge");
+
+          if (status === "RUNNING") {
+            icon.innerText = "◉";
+            badge.innerText = "Running...";
+            badge.className = "text-[11px] font-code text-tertiary animate-pulse agent-badge";
+          } else if (status === "COMPLETED") {
+            icon.innerText = "✓";
+            badge.innerText = `Complete (${data.duration}s)`;
+            badge.className = "text-[11px] font-code text-secondary font-bold agent-badge";
+          } else if (status === "FAILED") {
+            icon.innerText = "✕";
+            badge.innerText = "Failed";
+            badge.className = "text-[11px] font-code text-error font-bold agent-badge";
+          }
+        }
+      };
+
+      eventSource.onerror = (err) => {
+        console.error("SSE Error:", err);
+        eventSource.close();
+        btn.disabled = false;
+        btn.innerHTML = `<span class="material-symbols-outlined text-[20px]">play_circle</span> <span>Run Compliance Scan</span>`;
+        alert("Pipeline stream error. Please try again.");
+      };
+    }
+
+    // Toggle Market Pills
+    function toggleMarketPill(btn) {
+      if (btn.classList.contains("bg-primary-container")) {
+        btn.classList.remove("bg-primary-container", "text-on-primary");
+        btn.classList.add("bg-surface-container-high", "text-on-surface");
+        btn.querySelector("span:last-child").className = "material-symbols-outlined text-[14px] opacity-40";
+        btn.querySelector("span:last-child").innerText = "add";
+      } else {
+        btn.classList.add("bg-primary-container", "text-on-primary");
+        btn.classList.remove("bg-surface-container-high", "text-on-surface");
+        btn.querySelector("span:last-child").className = "material-symbols-outlined text-[14px]";
+        btn.querySelector("span:last-child").innerText = "check";
+      }
+    }
+
+    // Render Compliance Gaps Tab
+    function renderGapsTab(p) {
+      const compRes = p.compliance_results || {};
+      const gaps = compRes.gaps || [];
+
+      const summaryEl = document.getElementById("gapsSummaryChips");
+      const containerEl = document.getElementById("gapsCardContainer");
+      if (!summaryEl || !containerEl) return;
+
+      // Summary chips
+      const critCount = gaps.filter(g => (g.severity || g.risk_level || "").toUpperCase() === "CRITICAL").length;
+      const highCount = gaps.filter(g => (g.severity || g.risk_level || "").toUpperCase() === "HIGH").length;
+      const medCount  = gaps.filter(g => (g.severity || g.risk_level || "").toUpperCase() === "MEDIUM").length;
+      const openCount = gaps.length;
+
+      summaryEl.innerHTML = `
+        <div class="flex items-center gap-2 px-4 py-2 rounded-xl bg-surface-container border border-surface-container-high/40">
+          <span class="material-symbols-outlined text-[18px] text-on-surface-variant">flag</span>
+          <span class="text-sm font-extrabold text-on-surface">${openCount}</span>
+          <span class="text-xs text-on-surface-variant">Open Gaps</span>
+        </div>
+        ${critCount > 0 ? `
+        <div class="flex items-center gap-2 px-4 py-2 rounded-xl bg-error/15 border border-error/40">
+          <span class="w-2.5 h-2.5 rounded-full bg-error animate-pulse"></span>
+          <span class="text-sm font-extrabold text-error">${critCount}</span>
+          <span class="text-xs text-error/80">Critical</span>
+        </div>` : ''}
+        <div class="flex items-center gap-2 px-4 py-2 rounded-xl bg-error/10 border border-error/30">
+          <span class="w-2.5 h-2.5 rounded-full bg-error"></span>
+          <span class="text-sm font-extrabold text-error">${highCount}</span>
+          <span class="text-xs text-error/80">High Risk</span>
+        </div>
+        <div class="flex items-center gap-2 px-4 py-2 rounded-xl bg-tertiary/10 border border-tertiary/30">
+          <span class="w-2.5 h-2.5 rounded-full bg-tertiary"></span>
+          <span class="text-sm font-extrabold text-tertiary">${medCount}</span>
+          <span class="text-xs text-tertiary/80">Medium Risk</span>
+        </div>
+      `;
+
+      if (gaps.length === 0) {
+        containerEl.innerHTML = `
+          <div class="p-10 rounded-xl bg-surface-container border border-surface-container-high/40 flex flex-col items-center gap-3 text-center">
+            <span class="material-symbols-outlined text-[40px] text-secondary">verified</span>
+            <p class="text-sm font-bold text-on-surface">No Compliance Gaps Identified</p>
+            <p class="text-xs text-on-surface-variant max-w-sm">The latest compliance assessment did not detect any open gaps. Run a fresh scan to get updated results.</p>
+          </div>`;
+        return;
+      }
+
+      containerEl.innerHTML = gaps.map((g, i) => {
+        const sev = (g.severity || g.risk_level || "MEDIUM").toUpperCase();
+        const isCritical = sev === "CRITICAL";
+        const isHigh = sev === "HIGH" || isCritical;
+        const sevColor = isCritical
+          ? "border-error/60 bg-error/8"
+          : isHigh
+          ? "border-error/40 bg-error/5"
+          : sev === "LOW"
+          ? "border-secondary/40 bg-secondary/5"
+          : "border-tertiary/40 bg-tertiary/5";
+        const sevBadge = isCritical
+          ? "bg-error/30 text-error"
+          : isHigh
+          ? "bg-error/20 text-error"
+          : sev === "LOW"
+          ? "bg-secondary/20 text-secondary"
+          : "bg-tertiary/20 text-tertiary";
+        const iconColor = isHigh ? "text-error" : sev === "LOW" ? "text-secondary" : "text-tertiary";
+        const icon = isCritical ? "emergency_home" : isHigh ? "gpp_bad" : sev === "LOW" ? "gpp_good" : "gpp_maybe";
+
+        const gapId       = g.gap_id || g.id || `GAP-${String(i + 1).padStart(3, '0')}`;
+        const title       = g.gap || g.title || g.description || `Compliance Gap ${i+1}`;
+        const domain      = g.domain || g.category || "Compliance";
+        const country     = g.jurisdiction || g.country || "";
+        const regulation  = g.regulation || g.source_regulation || "";
+        const obligation  = g.obligation || g.description || "";
+        const gapDesc     = g.gap_description || g.current_state || "";
+        const remediation = g.remediation || g.action || g.recommended_action || "";
+        const penalty     = g.penalty_exposure || "";
+        const deadline    = g.deadline || g.effective_date || g.due_date || "";
+        const status      = g.status || "Open";
+
+        return `
+          <div class="rounded-xl border ${sevColor} p-5 flex flex-col gap-4 hover:brightness-105 transition-all">
+
+            <!-- Header row -->
+            <div class="flex items-start justify-between gap-4">
+              <div class="flex items-start gap-3">
+                <span class="material-symbols-outlined text-[22px] mt-0.5 ${iconColor}">${icon}</span>
+                <div class="flex flex-col gap-1">
+                  <span class="font-code text-[11px] text-on-surface-variant">${gapId}</span>
+                  <span class="font-bold text-sm text-on-surface leading-snug">${title}</span>
+                </div>
+              </div>
+              <div class="flex items-center gap-2 flex-shrink-0">
+                <span class="px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase ${sevBadge}">${sev}</span>
+                <span class="px-2.5 py-0.5 rounded-full text-[10px] font-semibold uppercase bg-surface-container-high text-on-surface-variant">${status}</span>
+              </div>
+            </div>
+
+            <!-- Metadata chips -->
+            <div class="flex flex-wrap gap-2 text-[11px] font-code text-on-surface-variant">
+              ${domain   ? `<span class="flex items-center gap-1 px-2 py-0.5 rounded bg-surface-container-high"><span class="material-symbols-outlined text-[12px]">category</span>${domain}</span>` : ''}
+              ${country  ? `<span class="flex items-center gap-1 px-2 py-0.5 rounded bg-surface-container-high"><span class="material-symbols-outlined text-[12px]">pin_drop</span>${country}</span>` : ''}
+              ${deadline ? `<span class="flex items-center gap-1 px-2 py-0.5 rounded bg-surface-container-high"><span class="material-symbols-outlined text-[12px]">schedule</span>Effective: ${deadline}</span>` : ''}
+              ${penalty  ? `<span class="flex items-center gap-1 px-2 py-0.5 rounded bg-error/10 text-error"><span class="material-symbols-outlined text-[12px]">gavel</span>${penalty}</span>` : ''}
+            </div>
+
+            <!-- Regulation pill -->
+            ${regulation ? `
+            <div class="text-[11px] font-code text-primary bg-primary/10 border border-primary/20 px-3 py-1.5 rounded-lg flex items-center gap-1.5 w-fit">
+              <span class="material-symbols-outlined text-[13px]">menu_book</span>
+              <span>${regulation}</span>
+            </div>` : ''}
+
+            <!-- Obligation -->
+            ${obligation ? `
+            <div class="flex flex-col gap-1">
+              <span class="text-[10px] font-semibold text-on-surface-variant uppercase tracking-wider">Regulatory Obligation</span>
+              <p class="text-xs text-on-surface leading-relaxed">${obligation}</p>
+            </div>` : ''}
+
+            <!-- Specific gap found -->
+            ${gapDesc ? `
+            <div class="p-3 rounded-lg bg-surface-container border border-surface-container-high/40 flex gap-2">
+              <span class="material-symbols-outlined text-[16px] text-tertiary mt-0.5 flex-shrink-0">search_insights</span>
+              <div class="flex flex-col gap-0.5">
+                <span class="text-[10px] font-semibold text-tertiary uppercase">Gap Identified</span>
+                <p class="text-xs text-on-surface leading-relaxed">${gapDesc}</p>
+              </div>
+            </div>` : ''}
+
+            <!-- Remediation -->
+            <div class="p-3 rounded-lg bg-surface-container-low border border-surface-container-high/30 flex gap-2">
+              <span class="material-symbols-outlined text-[16px] text-secondary mt-0.5 flex-shrink-0">task_alt</span>
+              <div class="flex flex-col gap-0.5">
+                <span class="text-[10px] font-semibold text-on-surface-variant uppercase tracking-wider">Recommended Remediation</span>
+                ${deadline ? `<p class="text-[10px] text-error font-semibold mt-1 mb-0.5">⏰ Compliance Deadline: ${deadline}</p>` : ''}
+                <p class="text-xs text-on-surface leading-relaxed">${remediation || 'Conduct a compliance review aligned with the applicable regulation and implement required controls within the regulatory deadline.'}</p>
+              </div>
+            </div>
+
+
+          </div>
+        `;
+      }).join("");
+    }
+
+    // Run Regulation Diff
+    async function handleRunDiff() {
+      const text1 = document.getElementById("diffDoc1Text").value.trim();
+      const text2 = document.getElementById("diffDoc2Text").value.trim();
+      const select1 = document.getElementById("diffDoc1Select");
+      const select2 = document.getElementById("diffDoc2Select");
+
+      const title1 = select1.value !== "custom" && availableCirculars[select1.value] ? availableCirculars[select1.value].title : "Baseline Document A";
+      const title2 = select2.value !== "custom" && availableCirculars[select2.value] ? availableCirculars[select2.value].title : "Updated Document B";
+
+      const container = document.getElementById("diffResultsContainer");
+      container.classList.remove("hidden");
+      container.classList.add("flex");
+
+      if (!text1 || !text2 || text1.length < 15 || text2.length < 15) {
+        container.innerHTML = `
+          <div class="p-6 rounded-xl bg-error-container/30 border border-error/40 flex items-start gap-3">
+            <span class="material-symbols-outlined text-error text-[24px]">error</span>
+            <div class="flex flex-col gap-1">
+              <h4 class="font-bold text-sm text-error">Comparison Unavailable</h4>
+              <p class="text-xs text-on-surface">Unable to compare these documents. Please verify that both documents contain readable text.</p>
+            </div>
+          </div>`;
+        return;
+      }
+
+      container.innerHTML = `<div class="p-8 text-center text-on-surface-variant bg-surface-container rounded-xl font-code">Analyzing full regulatory documents...</div>`;
+
+      try {
+        const res = await fetch("/api/diff", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            doc1_title: title1,
+            doc1_text: text1,
+            doc2_title: title2,
+            doc2_text: text2,
+            company_profile: currentActiveProfile ? currentActiveProfile.company_profile : null
+          })
+        });
+
+        const data = await res.json();
+        const diff = data.diff || {};
+
+        if (diff.status === "error" || diff.error) {
+          container.innerHTML = `
+            <div class="p-6 rounded-xl bg-error-container/30 border border-error/40 flex items-start gap-3">
+              <span class="material-symbols-outlined text-error text-[24px]">error</span>
+              <div class="flex flex-col gap-1">
+                <h4 class="font-bold text-sm text-error">Comparison Unavailable</h4>
+                <p class="text-xs text-on-surface">${diff.error_message || 'Unable to compare these documents. Please verify that both documents contain readable text.'}</p>
+              </div>
+            </div>`;
+          return;
+        }
+
+        let sevColor = "bg-tertiary/20 text-tertiary";
+        if (diff.change_severity === "HIGH" || diff.change_severity === "CRITICAL") sevColor = "bg-error/20 text-error";
+        else if (diff.change_severity === "LOW") sevColor = "bg-secondary/20 text-secondary";
+
+        let warningBanner = "";
+        if (diff.unrelated_warning) {
+          warningBanner = `
+            <div class="p-4 rounded-xl bg-tertiary-container/30 border border-tertiary/40 flex items-center justify-between">
+              <div class="flex items-center gap-2.5 text-tertiary text-xs font-semibold">
+                <span class="material-symbols-outlined text-[20px]">warning</span>
+                <span>${diff.unrelated_warning}</span>
+              </div>
+              <span class="text-[11px] text-on-surface-variant">User discretion advised</span>
+            </div>`;
+        }
+
+        const addedHtml = (diff.added_sections && diff.added_sections.length > 0) ? `
+          <div class="flex flex-col gap-2 pt-2">
+            <span class="text-xs font-semibold text-secondary flex items-center gap-1"><span class="material-symbols-outlined text-[16px]">add_circle</span> Added Sections (${diff.added_sections.length})</span>
+            <div class="flex flex-col gap-2">
+              ${diff.added_sections.map(s => `
+                <div class="p-3 rounded-lg bg-surface-container-low border-l-2 border-secondary text-xs flex flex-col gap-1">
+                  <span class="font-bold text-on-surface">${s.title || 'New Provision'}</span>
+                  <p class="text-on-surface-variant">${s.text || s.obligations}</p>
+                </div>
+              `).join("")}
+            </div>
+          </div>` : '';
+
+        const removedHtml = (diff.removed_sections && diff.removed_sections.length > 0) ? `
+          <div class="flex flex-col gap-2 pt-2">
+            <span class="text-xs font-semibold text-error flex items-center gap-1"><span class="material-symbols-outlined text-[16px]">remove_circle</span> Removed Sections (${diff.removed_sections.length})</span>
+            <div class="flex flex-col gap-2">
+              ${diff.removed_sections.map(s => `
+                <div class="p-3 rounded-lg bg-surface-container-low border-l-2 border-error text-xs flex flex-col gap-1">
+                  <span class="font-bold text-on-surface">${s.title || 'Rescinded Provision'}</span>
+                  <p class="text-on-surface-variant">${s.text}</p>
+                </div>
+              `).join("")}
+            </div>
+          </div>` : '';
+
+        const modifiedHtml = (diff.modified_requirements && diff.modified_requirements.length > 0) ? `
+          <div class="flex flex-col gap-2 pt-2">
+            <span class="text-xs font-semibold text-on-surface">Modified Requirements & Thresholds</span>
+            <div class="bg-surface-container-low rounded-lg overflow-hidden border border-surface-container-high/40 text-xs">
+              <div class="grid grid-cols-12 bg-surface-container-high px-4 py-2 font-semibold text-on-surface-variant">
+                <div class="col-span-4">Item</div>
+                <div class="col-span-3">Old Value</div>
+                <div class="col-span-3">New Value</div>
+                <div class="col-span-2">Impact</div>
+              </div>
+              ${diff.modified_requirements.map(m => `
+                <div class="grid grid-cols-12 px-4 py-2.5 border-t border-surface-container-high/30 items-center">
+                  <div class="col-span-4 font-semibold text-on-surface">${m.item}</div>
+                  <div class="col-span-3 font-code text-on-surface-variant">${m.old_val || 'N/A'}</div>
+                  <div class="col-span-3 font-code text-secondary font-semibold">${m.new_val || 'N/A'}</div>
+                  <div class="col-span-2 font-code text-tertiary">${m.impact_level || 'MEDIUM'}</div>
+                </div>
+              `).join("")}
+            </div>
+          </div>` : '';
+
+        const actionsHtml = (diff.recommended_actions && diff.recommended_actions.length > 0) ? `
+          <div class="flex flex-col gap-2 pt-2">
+            <span class="text-xs font-semibold text-on-surface">Recommended Remediation Actions</span>
+            <ul class="text-xs text-on-surface flex flex-col gap-1.5 list-disc pl-4">
+              ${diff.recommended_actions.map(act => `
+                <li><b>[${act.team || 'Compliance'}]</b> ${act.action} <span class="font-code text-tertiary">(Priority: ${act.priority || 'HIGH'})</span></li>
+              `).join("")}
+            </ul>
+          </div>` : '';
+
+        const affectedHtml = (diff.affected_entities && diff.affected_entities.length > 0) ? `
+          <div class="flex items-center gap-2 flex-wrap pt-2">
+            <span class="text-xs font-semibold text-on-surface-variant">Affected Entities:</span>
+            ${diff.affected_entities.map(e => `<span class="px-2 py-0.5 rounded bg-surface-variant text-[11px] text-on-surface font-code">${e}</span>`).join("")}
+          </div>` : '';
+
+        container.innerHTML = `
+          ${warningBanner}
+          <div class="bg-surface-container rounded-xl p-6 border border-surface-container-high/40 flex flex-col gap-4">
+            <div class="flex items-center justify-between pb-3 border-b border-surface-container-high/40">
+              <div class="flex items-center gap-3">
+                <h4 class="font-bold text-base text-on-surface">Diff Comparison Results</h4>
+                <span class="px-2.5 py-0.5 rounded-full text-xs font-bold uppercase ${sevColor}">${diff.change_severity || 'Not available'} Severity</span>
+              </div>
+              <span class="text-xs font-code text-on-surface-variant">Effective: ${diff.effective_date || 'Not specified'}</span>
+            </div>
+
+            <div class="flex flex-wrap items-center gap-3 text-xs font-code text-primary bg-surface-container-low p-2.5 rounded-lg border border-surface-container-high/30">
+              <span><b>Doc A:</b> ${diff.doc1_title || title1}</span>
+              <span>•</span>
+              <span><b>Doc B:</b> ${diff.doc2_title || title2}</span>
+            </div>
+
+            ${diff.parse_note ? `<div class="p-3 rounded-lg bg-surface-container-high text-xs text-primary font-code">${diff.parse_note}</div>` : ''}
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
+              <div class="p-4 rounded-lg bg-surface-container-low flex flex-col gap-1">
+                <span class="font-semibold text-on-surface-variant uppercase">Why This Matters</span>
+                <p class="text-on-surface leading-relaxed">${diff.why_this_matters || 'Not available'}</p>
+              </div>
+              <div class="p-4 rounded-lg bg-surface-container-low flex flex-col gap-1">
+                <span class="font-semibold text-on-surface-variant uppercase">Impact Summary</span>
+                <p class="text-on-surface leading-relaxed">${diff.company_impact_summary || 'Not available'}</p>
+              </div>
+            </div>
+
+            ${addedHtml}
+            ${removedHtml}
+            ${modifiedHtml}
+            ${affectedHtml}
+            ${actionsHtml}
+          </div>
+        `;
+      } catch (err) {
+        container.innerHTML = `
+          <div class="p-6 rounded-xl bg-error-container/30 border border-error/40 flex items-start gap-3">
+            <span class="material-symbols-outlined text-error text-[24px]">error</span>
+            <div class="flex flex-col gap-1">
+              <h4 class="font-bold text-sm text-error">Comparison Unavailable</h4>
+              <p class="text-xs text-on-surface">Unable to compare these documents. Please verify that both documents contain readable text.</p>
+            </div>
+          </div>`;
+      }
+    }
+
+    // Update Company Profile
+    async function handleUpdateProfile(e) {
+      e.preventDefault();
+      if (!currentActiveProfile) return;
+
+      const name = document.getElementById("editProfName").value.trim();
+      const type = document.getElementById("editProfType").value;
+      const industry = document.getElementById("editProfIndustry").value.trim();
+      const primary = document.getElementById("editProfPrimary").value.trim();
+      const countries = document.getElementById("editProfCountries").value.split(",").map(s => s.trim()).filter(Boolean);
+
+      try {
+        const res = await fetch("/api/profile/update", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            profile_id: currentActiveProfile.profile_id,
+            company_name: name,
+            company_type: type,
+            industry: industry,
+            primary_country: primary,
+            operating_countries: countries
+          })
+        });
+
+        const data = await res.json();
+        if (data.success) {
+          alert("Company profile updated successfully!");
+          loadWorkspaceProfile(data.updated_record);
+          fetchSavedProfiles();
+        }
+      } catch (err) {
+        alert("Error updating profile: " + err.message);
+      }
+    }
+
+    // Re-run Current Scan
+    function handleRerunCurrentScan() {
+      if (!currentActiveProfile) return;
+      document.getElementById("scanCompanyName").value = currentActiveProfile.company_name;
+      navigateTo("new-scan");
+    }
+
+    // Download PDF
+    function handleDownloadCurrentPDF() {
+      if (!currentActiveProfile) return alert("No scan selected");
+      window.open(`/api/pdf/${currentActiveProfile.profile_id}`, "_blank");
+    }
+
+    // Delete Profile
+    async function handleDeleteProfile(profileId) {
+      if (!confirm(`Are you sure you want to delete scan ${profileId}?`)) return;
+      try {
+        const res = await fetch(`/api/saved_profiles/${profileId}`, { method: "DELETE" });
+        if (res.ok) {
+          fetchSavedProfiles();
+        }
+      } catch (err) {
+        alert("Error deleting profile: " + err.message);
+      }
+    }
+
+    // Re-run Profile from Saved Profiles list
+    function handleRerunProfile(profileId) {
+      openWorkspaceForId(profileId).then(() => {
+        navigateTo("new-scan");
+      });
+    }
+  </script>
+</body>
+</html>

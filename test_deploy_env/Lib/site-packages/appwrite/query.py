@@ -1,0 +1,749 @@
+import json
+
+
+# Inherit from dict to allow for easy serialization
+class Query:
+    def __init__(self, method, attribute=None, values=None):
+        self.method = method
+
+        if attribute is not None:
+            self.attribute = attribute
+
+        if values is not None:
+            self.values = values if isinstance(values, list) else [values]
+
+    def __str__(self):
+        return json.dumps(self.__dict__, separators=(",", ":"), default=lambda obj: obj.__dict__)
+
+    @staticmethod
+    def equal(attribute, value):
+        return str(Query("equal", attribute, value))
+
+    @staticmethod
+    def not_equal(attribute, value):
+        return str(Query("notEqual", attribute, value))
+
+    @staticmethod
+    def regex(attribute, pattern):
+        """
+        Filter resources where attribute matches a regular expression pattern.
+
+        Args:
+            attribute: The attribute to filter on.
+            pattern: The regular expression pattern to match.
+
+        Returns:
+            The query string.
+        """
+        return str(Query("regex", attribute, pattern))
+
+    @staticmethod
+    def less_than(attribute, value):
+        return str(Query("lessThan", attribute, value))
+
+    @staticmethod
+    def less_than_equal(attribute, value):
+        return str(Query("lessThanEqual", attribute, value))
+
+    @staticmethod
+    def greater_than(attribute, value):
+        return str(Query("greaterThan", attribute, value))
+
+    @staticmethod
+    def greater_than_equal(attribute, value):
+        return str(Query("greaterThanEqual", attribute, value))
+
+    @staticmethod
+    def is_null(attribute):
+        return str(Query("isNull", attribute, None))
+
+    @staticmethod
+    def is_not_null(attribute):
+        return str(Query("isNotNull", attribute, None))
+
+    @staticmethod
+    def exists(attributes):
+        """
+        Filter resources where the specified attributes exist.
+
+        Args:
+            attributes: The list of attributes that must exist.
+
+        Returns:
+            The query string.
+        """
+        return str(Query("exists", None, attributes))
+
+    @staticmethod
+    def not_exists(attributes):
+        """
+        Filter resources where the specified attributes do not exist.
+
+        Args:
+            attributes: The list of attributes that must not exist.
+
+        Returns:
+            The query string.
+        """
+        return str(Query("notExists", None, attributes))
+
+    @staticmethod
+    def between(attribute, start, end):
+        return str(Query("between", attribute, [start, end]))
+
+    @staticmethod
+    def starts_with(attribute, value):
+        return str(Query("startsWith", attribute, value))
+
+    @staticmethod
+    def ends_with(attribute, value):
+        return str(Query("endsWith", attribute, value))
+
+    @staticmethod
+    def select(attributes):
+        return str(Query("select", None, attributes))
+
+    @staticmethod
+    def search(attribute, value):
+        return str(Query("search", attribute, value))
+
+    @staticmethod
+    def order_asc(attribute):
+        return str(Query("orderAsc", attribute, None))
+
+    @staticmethod
+    def order_desc(attribute):
+        return str(Query("orderDesc", attribute, None))
+
+    @staticmethod
+    def order_random():
+        return str(Query("orderRandom", None, None))
+
+    @staticmethod
+    def cursor_before(id):
+        return str(Query("cursorBefore", None, id))
+
+    @staticmethod
+    def cursor_after(id):
+        return str(Query("cursorAfter", None, id))
+
+    @staticmethod
+    def limit(limit):
+        return str(Query("limit", None, limit))
+
+    @staticmethod
+    def offset(offset):
+        return str(Query("offset", None, offset))
+
+    @staticmethod
+    def contains(attribute, value):
+        """
+        Filter resources where attribute contains the specified value.
+        For string attributes, checks if the string contains the substring.
+
+        Note: For array attributes, use contains_any() or contains_all() instead.
+        """
+        return str(Query("contains", attribute, value))
+
+    @staticmethod
+    def contains_any(attribute, value):
+        """
+        Filter resources where attribute contains ANY of the specified values.
+        For array and relationship attributes, matches documents where the attribute
+        contains at least one of the given values.
+        """
+        return str(Query("containsAny", attribute, value))
+
+    @staticmethod
+    def contains_all(attribute, value):
+        """
+        Filter resources where attribute contains ALL of the specified values.
+        For array and relationship attributes, matches documents where the attribute
+        contains every one of the given values.
+        """
+        return str(Query("containsAll", attribute, value))
+
+    @staticmethod
+    def not_contains(attribute, value):
+        return str(Query("notContains", attribute, value))
+
+    @staticmethod
+    def not_search(attribute, value):
+        return str(Query("notSearch", attribute, value))
+
+    @staticmethod
+    def not_between(attribute, start, end):
+        return str(Query("notBetween", attribute, [start, end]))
+
+    @staticmethod
+    def not_starts_with(attribute, value):
+        return str(Query("notStartsWith", attribute, value))
+
+    @staticmethod
+    def not_ends_with(attribute, value):
+        return str(Query("notEndsWith", attribute, value))
+
+    @staticmethod
+    def created_before(value):
+        return Query.less_than("$createdAt", value)
+
+    @staticmethod
+    def created_after(value):
+        return Query.greater_than("$createdAt", value)
+
+    @staticmethod
+    def created_between(start, end):
+        return Query.between("$createdAt", start, end)
+
+    @staticmethod
+    def updated_before(value):
+        return Query.less_than("$updatedAt", value)
+
+    @staticmethod
+    def updated_after(value):
+        return Query.greater_than("$updatedAt", value)
+
+    @staticmethod
+    def updated_between(start, end):
+        return Query.between("$updatedAt", start, end)
+
+    @staticmethod
+    def or_queries(queries):
+        return str(Query("or", None, [json.loads(query) for query in queries]))
+
+    @staticmethod
+    def and_queries(queries):
+        return str(Query("and", None, [json.loads(query) for query in queries]))
+
+    @staticmethod
+    def elem_match(attribute, queries):
+        """
+        Filter array elements where at least one element matches all the specified queries.
+
+        Args:
+            attribute: The attribute containing the array to filter on.
+            queries: The list of query strings to match against array elements.
+
+        Returns:
+            The query string.
+        """
+        return str(Query("elemMatch", attribute, [json.loads(query) for query in queries]))
+
+    @staticmethod
+    def relationship(attribute, queries):
+        """
+        Constrain populated related documents on a relationship attribute.
+
+        Args:
+            attribute: The relationship attribute to query.
+            queries: Filter, order, select, and pagination queries applied to related documents.
+
+        Returns:
+            The query string.
+        """
+        return str(Query("relationship", attribute, [json.loads(query) for query in queries]))
+
+    @staticmethod
+    def distance_equal(attribute, values, distance, meters=True):
+        return str(Query("distanceEqual", attribute, [[values, distance, meters]]))
+
+    @staticmethod
+    def distance_not_equal(attribute, values, distance, meters=True):
+        return str(Query("distanceNotEqual", attribute, [[values, distance, meters]]))
+
+    @staticmethod
+    def distance_greater_than(attribute, values, distance, meters=True):
+        return str(Query("distanceGreaterThan", attribute, [[values, distance, meters]]))
+
+    @staticmethod
+    def distance_less_than(attribute, values, distance, meters=True):
+        return str(Query("distanceLessThan", attribute, [[values, distance, meters]]))
+
+    @staticmethod
+    def vector_dot(attribute, vector):
+        return str(Query("vectorDot", attribute, [vector]))
+
+    @staticmethod
+    def vector_cosine(attribute, vector):
+        return str(Query("vectorCosine", attribute, [vector]))
+
+    @staticmethod
+    def vector_euclidean(attribute, vector):
+        return str(Query("vectorEuclidean", attribute, [vector]))
+
+    @staticmethod
+    def intersects(attribute, values):
+        return str(Query("intersects", attribute, [values]))
+
+    @staticmethod
+    def not_intersects(attribute, values):
+        return str(Query("notIntersects", attribute, [values]))
+
+    @staticmethod
+    def crosses(attribute, values):
+        return str(Query("crosses", attribute, [values]))
+
+    @staticmethod
+    def not_crosses(attribute, values):
+        return str(Query("notCrosses", attribute, [values]))
+
+    @staticmethod
+    def overlaps(attribute, values):
+        return str(Query("overlaps", attribute, [values]))
+
+    @staticmethod
+    def not_overlaps(attribute, values):
+        return str(Query("notOverlaps", attribute, [values]))
+
+    @staticmethod
+    def touches(attribute, values):
+        return str(Query("touches", attribute, [values]))
+
+    @staticmethod
+    def not_touches(attribute, values):
+        return str(Query("notTouches", attribute, [values]))
+
+    @staticmethod
+    def count(attribute='*', alias=''):
+        return str(Query("count", attribute, alias if alias != '' else None))
+
+    @staticmethod
+    def count_distinct(attribute, alias=''):
+        return str(Query("countDistinct", attribute, alias if alias != '' else None))
+
+    @staticmethod
+    def sum(attribute, alias=''):
+        return str(Query("sum", attribute, alias if alias != '' else None))
+
+    @staticmethod
+    def avg(attribute, alias=''):
+        return str(Query("avg", attribute, alias if alias != '' else None))
+
+    @staticmethod
+    def min(attribute, alias=''):
+        return str(Query("min", attribute, alias if alias != '' else None))
+
+    @staticmethod
+    def max(attribute, alias=''):
+        return str(Query("max", attribute, alias if alias != '' else None))
+
+    @staticmethod
+    def stddev(attribute, alias=''):
+        return str(Query("stddev", attribute, alias if alias != '' else None))
+
+    @staticmethod
+    def stddev_pop(attribute, alias=''):
+        return str(Query("stddevPop", attribute, alias if alias != '' else None))
+
+    @staticmethod
+    def stddev_samp(attribute, alias=''):
+        return str(Query("stddevSamp", attribute, alias if alias != '' else None))
+
+    @staticmethod
+    def variance(attribute, alias=''):
+        return str(Query("variance", attribute, alias if alias != '' else None))
+
+    @staticmethod
+    def var_pop(attribute, alias=''):
+        return str(Query("varPop", attribute, alias if alias != '' else None))
+
+    @staticmethod
+    def var_samp(attribute, alias=''):
+        return str(Query("varSamp", attribute, alias if alias != '' else None))
+
+    @staticmethod
+    def bit_and(attribute, alias=''):
+        return str(Query("bitAnd", attribute, alias if alias != '' else None))
+
+    @staticmethod
+    def bit_or(attribute, alias=''):
+        return str(Query("bitOr", attribute, alias if alias != '' else None))
+
+    @staticmethod
+    def bit_xor(attribute, alias=''):
+        return str(Query("bitXor", attribute, alias if alias != '' else None))
+
+    @staticmethod
+    def group_by(attributes):
+        return str(Query("groupBy", None, attributes))
+
+    @staticmethod
+    def having(queries):
+        return str(Query("having", None, [json.loads(query) for query in queries]))
+
+    @staticmethod
+    def distinct():
+        return str(Query("distinct", None, None))
+
+    @staticmethod
+    def on(left, right, operator='='):
+        return str(Query("on", None, [left, operator, right]))
+
+    @staticmethod
+    def join(table, left, right='', operator='=', alias=''):
+        return Query._create_join("join", table, left, right, operator, alias)
+
+    @staticmethod
+    def left_join(table, left, right='', operator='=', alias=''):
+        return Query._create_join("leftJoin", table, left, right, operator, alias)
+
+    @staticmethod
+    def right_join(table, left, right='', operator='=', alias=''):
+        return Query._create_join("rightJoin", table, left, right, operator, alias)
+
+    @staticmethod
+    def full_outer_join(table, left, right='', operator='=', alias=''):
+        return Query._create_join("fullOuterJoin", table, left, right, operator, alias)
+
+    @staticmethod
+    def cross_join(table, alias=''):
+        return str(Query("crossJoin", table, alias if alias != '' else None))
+
+    @staticmethod
+    def covers(attribute, values):
+        return str(Query("covers", attribute, [values]))
+
+    @staticmethod
+    def not_covers(attribute, values):
+        return str(Query("notCovers", attribute, [values]))
+
+    @staticmethod
+    def spatial_equals(attribute, values):
+        return str(Query("spatialEquals", attribute, [values]))
+
+    @staticmethod
+    def not_spatial_equals(attribute, values):
+        return str(Query("notSpatialEquals", attribute, [values]))
+
+    @staticmethod
+    def page(page, per_page=25):
+        if page < 1:
+            raise ValueError(f'Page must be >= 1, got {page}')
+        if per_page < 1:
+            raise ValueError(f'Per page must be >= 1, got {per_page}')
+
+        return [
+            Query.limit(per_page),
+            Query.offset((page - 1) * per_page),
+        ]
+
+    @staticmethod
+    def builder():
+        return Query.Builder()
+
+    @staticmethod
+    def _flatten(value):
+        if isinstance(value, Query.Builder):
+            return value.build()
+        if isinstance(value, Query):
+            return str(value)
+        if not isinstance(value, list):
+            return value
+
+        out = []
+        changed = False
+        for item in value:
+            flat = Query._flatten(item)
+            if isinstance(item, (Query.Builder, Query)):
+                if isinstance(flat, list):
+                    out.extend(flat)
+                else:
+                    out.append(flat)
+                changed = True
+                continue
+            if flat is not item:
+                changed = True
+            out.append(flat)
+
+        return out if changed else value
+
+    @staticmethod
+    def _create_join(method, table, left, right, operator, alias):
+        if isinstance(left, list):
+            return Query._nested_join(method, table, '', left)
+        if isinstance(right, list):
+            return Query._nested_join(method, table, left, right)
+        return Query._join(method, table, left, right, operator, alias)
+
+    @staticmethod
+    def _nested_join(method, table, alias, on):
+        values = []
+        if alias != '':
+            values.append(alias)
+        for query in on:
+            values.append(json.loads(query))
+        return str(Query(method, table, values))
+
+    @staticmethod
+    def _join(method, table, left, right, operator, alias):
+        values = [left, operator, right]
+        if alias != '':
+            values.append(alias)
+        return str(Query(method, table, values))
+
+    class Builder:
+        def __init__(self):
+            self._queries = []
+
+        def build(self):
+            return list(self._queries)
+
+        def equal(self, attribute, value):
+            return self._push(Query.equal(attribute, value))
+
+        def not_equal(self, attribute, value):
+            return self._push(Query.not_equal(attribute, value))
+
+        def less_than(self, attribute, value):
+            return self._push(Query.less_than(attribute, value))
+
+        def less_than_equal(self, attribute, value):
+            return self._push(Query.less_than_equal(attribute, value))
+
+        def greater_than(self, attribute, value):
+            return self._push(Query.greater_than(attribute, value))
+
+        def greater_than_equal(self, attribute, value):
+            return self._push(Query.greater_than_equal(attribute, value))
+
+        def search(self, attribute, value):
+            return self._push(Query.search(attribute, value))
+
+        def is_null(self, attribute):
+            return self._push(Query.is_null(attribute))
+
+        def is_not_null(self, attribute):
+            return self._push(Query.is_not_null(attribute))
+
+        def between(self, attribute, start, end):
+            return self._push(Query.between(attribute, start, end))
+
+        def starts_with(self, attribute, value):
+            return self._push(Query.starts_with(attribute, value))
+
+        def ends_with(self, attribute, value):
+            return self._push(Query.ends_with(attribute, value))
+
+        def select(self, attributes):
+            return self._push(Query.select(attributes))
+
+        def cursor_after(self, id):
+            return self._push(Query.cursor_after(id))
+
+        def cursor_before(self, id):
+            return self._push(Query.cursor_before(id))
+
+        def order_asc(self, attribute):
+            return self._push(Query.order_asc(attribute))
+
+        def order_desc(self, attribute):
+            return self._push(Query.order_desc(attribute))
+
+        def order_random(self):
+            return self._push(Query.order_random())
+
+        def limit(self, limit):
+            return self._push(Query.limit(limit))
+
+        def offset(self, offset):
+            return self._push(Query.offset(offset))
+
+        def contains(self, attribute, value):
+            return self._push(Query.contains(attribute, value))
+
+        def contains_any(self, attribute, value):
+            return self._push(Query.contains_any(attribute, value))
+
+        def contains_all(self, attribute, value):
+            return self._push(Query.contains_all(attribute, value))
+
+        def not_contains(self, attribute, value):
+            return self._push(Query.not_contains(attribute, value))
+
+        def not_search(self, attribute, value):
+            return self._push(Query.not_search(attribute, value))
+
+        def not_between(self, attribute, start, end):
+            return self._push(Query.not_between(attribute, start, end))
+
+        def not_starts_with(self, attribute, value):
+            return self._push(Query.not_starts_with(attribute, value))
+
+        def not_ends_with(self, attribute, value):
+            return self._push(Query.not_ends_with(attribute, value))
+
+        def regex(self, attribute, pattern):
+            return self._push(Query.regex(attribute, pattern))
+
+        def exists(self, attributes):
+            return self._push(Query.exists(attributes))
+
+        def not_exists(self, attributes):
+            return self._push(Query.not_exists(attributes))
+
+        def created_before(self, value):
+            return self._push(Query.created_before(value))
+
+        def created_after(self, value):
+            return self._push(Query.created_after(value))
+
+        def created_between(self, start, end):
+            return self._push(Query.created_between(start, end))
+
+        def updated_before(self, value):
+            return self._push(Query.updated_before(value))
+
+        def updated_after(self, value):
+            return self._push(Query.updated_after(value))
+
+        def updated_between(self, start, end):
+            return self._push(Query.updated_between(start, end))
+
+        def or_queries(self, queries):
+            return self._push(Query.or_queries(queries))
+
+        def and_queries(self, queries):
+            return self._push(Query.and_queries(queries))
+
+        def elem_match(self, attribute, queries):
+            return self._push(Query.elem_match(attribute, queries))
+
+        def relationship(self, attribute, queries):
+            return self._push(Query.relationship(attribute, queries))
+
+        def distance_equal(self, attribute, values, distance, meters=True):
+            return self._push(Query.distance_equal(attribute, values, distance, meters))
+
+        def distance_not_equal(self, attribute, values, distance, meters=True):
+            return self._push(Query.distance_not_equal(attribute, values, distance, meters))
+
+        def distance_greater_than(self, attribute, values, distance, meters=True):
+            return self._push(Query.distance_greater_than(attribute, values, distance, meters))
+
+        def distance_less_than(self, attribute, values, distance, meters=True):
+            return self._push(Query.distance_less_than(attribute, values, distance, meters))
+
+        def intersects(self, attribute, values):
+            return self._push(Query.intersects(attribute, values))
+
+        def not_intersects(self, attribute, values):
+            return self._push(Query.not_intersects(attribute, values))
+
+        def crosses(self, attribute, values):
+            return self._push(Query.crosses(attribute, values))
+
+        def not_crosses(self, attribute, values):
+            return self._push(Query.not_crosses(attribute, values))
+
+        def overlaps(self, attribute, values):
+            return self._push(Query.overlaps(attribute, values))
+
+        def not_overlaps(self, attribute, values):
+            return self._push(Query.not_overlaps(attribute, values))
+
+        def touches(self, attribute, values):
+            return self._push(Query.touches(attribute, values))
+
+        def not_touches(self, attribute, values):
+            return self._push(Query.not_touches(attribute, values))
+
+        def count(self, attribute='*', alias=''):
+            return self._push(Query.count(attribute, alias))
+
+        def count_distinct(self, attribute, alias=''):
+            return self._push(Query.count_distinct(attribute, alias))
+
+        def sum(self, attribute, alias=''):
+            return self._push(Query.sum(attribute, alias))
+
+        def avg(self, attribute, alias=''):
+            return self._push(Query.avg(attribute, alias))
+
+        def min(self, attribute, alias=''):
+            return self._push(Query.min(attribute, alias))
+
+        def max(self, attribute, alias=''):
+            return self._push(Query.max(attribute, alias))
+
+        def stddev(self, attribute, alias=''):
+            return self._push(Query.stddev(attribute, alias))
+
+        def stddev_pop(self, attribute, alias=''):
+            return self._push(Query.stddev_pop(attribute, alias))
+
+        def stddev_samp(self, attribute, alias=''):
+            return self._push(Query.stddev_samp(attribute, alias))
+
+        def variance(self, attribute, alias=''):
+            return self._push(Query.variance(attribute, alias))
+
+        def var_pop(self, attribute, alias=''):
+            return self._push(Query.var_pop(attribute, alias))
+
+        def var_samp(self, attribute, alias=''):
+            return self._push(Query.var_samp(attribute, alias))
+
+        def bit_and(self, attribute, alias=''):
+            return self._push(Query.bit_and(attribute, alias))
+
+        def bit_or(self, attribute, alias=''):
+            return self._push(Query.bit_or(attribute, alias))
+
+        def bit_xor(self, attribute, alias=''):
+            return self._push(Query.bit_xor(attribute, alias))
+
+        def group_by(self, attributes):
+            return self._push(Query.group_by(attributes))
+
+        def having(self, queries):
+            return self._push(Query.having(queries))
+
+        def distinct(self):
+            return self._push(Query.distinct())
+
+        def join(self, table, left, right='', operator='=', alias=''):
+            return self._push(Query.join(table, left, right, operator, alias))
+
+        def left_join(self, table, left, right='', operator='=', alias=''):
+            return self._push(Query.left_join(table, left, right, operator, alias))
+
+        def right_join(self, table, left, right='', operator='=', alias=''):
+            return self._push(Query.right_join(table, left, right, operator, alias))
+
+        def full_outer_join(self, table, left, right='', operator='=', alias=''):
+            return self._push(Query.full_outer_join(table, left, right, operator, alias))
+
+        def cross_join(self, table, alias=''):
+            return self._push(Query.cross_join(table, alias))
+
+        def vector_dot(self, attribute, vector):
+            return self._push(Query.vector_dot(attribute, vector))
+
+        def vector_cosine(self, attribute, vector):
+            return self._push(Query.vector_cosine(attribute, vector))
+
+        def vector_euclidean(self, attribute, vector):
+            return self._push(Query.vector_euclidean(attribute, vector))
+
+        def covers(self, attribute, values):
+            return self._push(Query.covers(attribute, values))
+
+        def not_covers(self, attribute, values):
+            return self._push(Query.not_covers(attribute, values))
+
+        def spatial_equals(self, attribute, values):
+            return self._push(Query.spatial_equals(attribute, values))
+
+        def not_spatial_equals(self, attribute, values):
+            return self._push(Query.not_spatial_equals(attribute, values))
+
+        def page(self, page, per_page=25):
+            return self._push(Query.page(page, per_page))
+
+        def _push(self, query):
+            if isinstance(query, list):
+                self._queries.extend(query)
+            else:
+                self._queries.append(query)
+
+            return self

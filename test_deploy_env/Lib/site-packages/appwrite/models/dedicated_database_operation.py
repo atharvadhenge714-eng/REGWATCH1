@@ -1,0 +1,72 @@
+from typing import Any, Dict, List, Optional, Union, cast
+from pydantic import Field, PrivateAttr, model_validator
+
+from .base_model import AppwriteModel
+
+
+class DedicatedDatabaseOperation(AppwriteModel):
+    """
+    Operation
+
+    Attributes
+    ----------
+    id : str
+        Operation ID.
+    createdat : str
+        Operation creation time in ISO 8601 format.
+    databaseid : str
+        Database ID the operation ran against.
+    type : str
+        Operation type, such as provision, update, credentials-update, restore, pausing, resuming, failover, backup-create or cross-region-enable.
+    status : str
+        Operation status. Possible values: queued (accepted and waiting to resume), running (in progress), completed (finished successfully), failed (ended in an error).
+    attempts : float
+        Number of times this operation has been attempted.
+    requestedat : Optional[str]
+        Time the operation was requested, in ISO 8601 format.
+    startedat : Optional[str]
+        Time the operation started, in ISO 8601 format.
+    completedat : Optional[str]
+        Time the operation reached a terminal state, in ISO 8601 format.
+    errorcode : str
+        Machine-readable failure code. `Interrupted` marks an attempt that ended before its outcome could be confirmed.
+    errormessage : str
+        Failure message if the operation failed.
+    """
+
+    id: str = Field(..., alias='$id')
+    createdat: str = Field(..., alias='$createdAt')
+    databaseid: str = Field(..., alias='databaseId')
+    type: str = Field(..., alias='type')
+    status: str = Field(..., alias='status')
+    attempts: float = Field(..., alias='attempts')
+    requestedat: Optional[str] = Field(default=None, alias='requestedAt')
+    startedat: Optional[str] = Field(default=None, alias='startedAt')
+    completedat: Optional[str] = Field(default=None, alias='completedAt')
+    errorcode: str = Field(..., alias='errorCode')
+    errormessage: str = Field(..., alias='errorMessage')
+
+    @model_validator(mode='before')
+    @classmethod
+    def _apply_defaults(cls, data: Any) -> Any:
+        if not isinstance(data, dict):
+            return data
+
+        data = dict(data)
+        if '$id' not in data and 'id' not in data:
+            data['$id'] = ''
+        if '$createdAt' not in data and 'createdat' not in data:
+            data['$createdAt'] = ''
+        if 'databaseId' not in data and 'databaseid' not in data:
+            data['databaseId'] = ''
+        if 'type' not in data:
+            data['type'] = ''
+        if 'status' not in data:
+            data['status'] = ''
+        if 'attempts' not in data:
+            data['attempts'] = 0
+        if 'errorCode' not in data and 'errorcode' not in data:
+            data['errorCode'] = ''
+        if 'errorMessage' not in data and 'errormessage' not in data:
+            data['errorMessage'] = ''
+        return data

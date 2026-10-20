@@ -1,0 +1,407 @@
+<!DOCTYPE html><html class="dark" lang="en"><head><meta charset="utf-8"><meta content="width=device-width, initial-scale=1.0" name="viewport"><meta content="web_dashboard" name="shell-type"><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@100..900&amp;display=swap" rel="stylesheet"><style>@layer base{html,body{margin:0;padding:0;}body{overscroll-behavior:none;}main>:first-child{margin-top:0!important;}main>:last-child{margin-bottom:0!important;}}::-webkit-scrollbar{display:none;}</style><script src="https://cdn.tailwindcss.com"></script><script id="tailwind-config">tailwind.config={darkMode:"class",theme:{extend:{colors:{"secondary-container":"#00a572","surface-container-high":"#1c2b3c","on-error":"#690005","tertiary-fixed":"#ffddb8","surface-container-lowest":"#010f1f","on-secondary-fixed":"#002113","on-error-container":"#ffdad6","on-surface":"#d4e4fa","on-tertiary-fixed":"#2a1700","outline":"#908fa0","inverse-surface":"#d4e4fa","tertiary-fixed-dim":"#ffb95f","primary-fixed-dim":"#c0c1ff","tertiary-container":"#ca8100","on-primary-container":"#0d0096","on-primary-fixed":"#07006c","on-secondary-container":"#00311f","on-background":"#d4e4fa","surface-variant":"#273647","surface-container":"#122131","on-tertiary-fixed-variant":"#653e00","primary":"#c0c1ff","on-tertiary-container":"#3e2400","background":"#051424","on-surface-variant":"#c7c4d7","outline-variant":"#464554","surface-dim":"#051424","secondary-fixed":"#6ffbbe","on-secondary":"#003824","tertiary":"#ffb95f","on-primary":"#1000a9","surface-bright":"#2c3a4c","surface-tint":"#c0c1ff","error":"#ffb4ab","inverse-primary":"#494bd6","inverse-on-surface":"#233143","surface-container-highest":"#273647","secondary":"#4edea3","surface":"#051424","on-tertiary":"#472a00","secondary-fixed-dim":"#4edea3","primary-container":"#8083ff","surface-container-low":"#0d1c2d","error-container":"#93000a","primary-fixed":"#e1e0ff","on-secondary-fixed-variant":"#005236","on-primary-fixed-variant":"#2f2ebe"},borderRadius:{DEFAULT:"0.25rem",lg:"0.5rem",xl:"0.75rem",full:"9999px"},spacing:{"space-md":"1rem","space-xl":"2.5rem","space-xs":"0.25rem","gutter-mobile":"1rem","space-lg":"1.5rem","space-sm":"0.5rem",gutter:"1.5rem",margin:"2rem","margin-mobile":"1rem"},fontFamily:{"headline-lg":["Geist"],"display-lg":["Geist"],"code-md":["JetBrains Mono"],"label-sm":["Geist"],"headline-md":["Geist"],"body-lg":["Geist"],"label-md":["Geist"],"body-md":["Geist"],"body-sm":["Geist"],"headline-sm":["Geist"],"display-lg-mobile":["Geist"]},fontSize:{"headline-lg":["28px",{lineHeight:"36px",letterSpacing:"-0.015em",fontWeight:"600"}],"display-lg":["40px",{lineHeight:"48px",letterSpacing:"-0.02em",fontWeight:"600"}],"code-md":["12px",{lineHeight:"18px",fontWeight:"400"}],"label-sm":["11px",{lineHeight:"14px",letterSpacing:"0.04em",fontWeight:"600"}],"headline-md":["22px",{lineHeight:"30px",letterSpacing:"-0.01em",fontWeight:"600"}],"body-lg":["16px",{lineHeight:"24px",fontWeight:"400"}],"label-md":["13px",{lineHeight:"18px",letterSpacing:"0.01em",fontWeight:"500"}],"body-md":["14px",{lineHeight:"20px",fontWeight:"400"}],"body-sm":["12px",{lineHeight:"18px",fontWeight:"400"}],"headline-sm":["18px",{lineHeight:"26px",letterSpacing:"-0.005em",fontWeight:"600"}],"display-lg-mobile":["30px",{lineHeight:"38px",letterSpacing:"-0.02em",fontWeight:"600"}]}}}};</script></head><body class="bg-surface font-body-md text-on-surface antialiased"><aside class="fixed left-0 top-0 h-full w-64 bg-surface-container-low z-50 flex flex-col justify-between py-6 px-4 shadow-[0_1px_8px_rgba(0,0,0,0.4)]"><div class="flex flex-col gap-6"><div class="flex items-center gap-3 px-2"><div class="w-9 h-9 rounded-lg bg-surface-variant flex items-center justify-center text-primary shadow-[0_1px_4px_rgba(0,0,0,0.3)]"><span class="material-symbols-outlined text-[20px]">verified_user</span></div><div class="flex flex-col"><div class="flex items-center gap-2"><span class="font-headline-sm text-headline-sm tracking-tight text-on-surface">REGWATCH</span><span class="px-1.5 py-0.5 rounded-full bg-secondary/10 text-secondary font-label-sm text-label-sm uppercase">AI</span></div><span class="font-label-sm text-label-sm text-on-surface-variant tracking-wider uppercase">Compliance Intel</span></div></div><nav class="flex flex-col gap-1" data-active-classes="bg-surface-container-high text-on-surface font-headline-sm"><a class="flex items-center gap-3 px-3 py-2.5 rounded-lg font-body-md text-body-md text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-all" data-path="home" href="#"><span class="material-symbols-outlined text-[20px]">home</span><span class="">Home</span></a><a class="flex items-center gap-3 px-3 py-2.5 rounded-lg font-body-md text-body-md text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-all" data-path="saved-profiles" href="#"><span class="material-symbols-outlined text-[20px]">folder</span><span class="">Saved Profiles</span></a><a class="flex items-center gap-3 px-3 py-2.5 rounded-lg font-body-md text-body-md text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-all" data-path="new-scan" href="#"><span class="material-symbols-outlined text-[20px]">add_circle</span><span class="">New Scan</span></a><a aria-current="page" class="flex items-center gap-3 px-3 py-2.5 rounded-lg transition-all bg-surface-container-high text-on-surface font-headline-sm" data-path="active-workspace" href="#"><span class="material-symbols-outlined text-[20px]">grid_view</span><span class="">Active Workspace</span></a></nav></div><div class="px-2"><div class="flex items-center justify-between p-2 rounded-xl bg-surface-container hover:bg-surface-container-high transition-colors cursor-pointer"><div class="flex items-center gap-3"><div class="w-8 h-8 rounded-full bg-primary flex items-center justify-center"><span class="material-symbols-outlined text-on-primary text-[18px]">person</span></div><div class="flex flex-col"><span class="font-label-md text-label-md text-on-surface leading-tight">Compliance Officer</span><span class="font-label-sm text-label-sm text-on-surface-variant leading-tight">demo@regwatch.io</span></div></div><span class="material-symbols-outlined text-on-surface-variant text-[18px]">unfold_more</span></div></div></aside><div class="pl-64"><header class="fixed top-0 left-64 right-0 h-16 bg-surface/80 backdrop-blur-xl z-40 flex items-center justify-between px-8 shadow-[0_1px_8px_rgba(0,0,0,0.15)]"><div class="flex items-center gap-2 font-headline-sm text-on-surface"><span class="">Compliance Intelligence Workspace</span></div><div class="flex items-center gap-4"><div class="w-8 h-8 rounded-full bg-primary flex items-center justify-center"><span class="material-symbols-outlined text-on-primary text-[18px]">person</span></div></div></header><main class="w-full pt-16 bg-surface px-8 pb-12"><div class="flex flex-col w-full">
+<!-- Profile Metadata & Navigation Header -->
+<div class="flex flex-col gap-6 mb-8">
+<div class="flex flex-wrap items-center justify-between gap-4">
+<div class="flex items-center gap-4">
+<div class="w-12 h-12 rounded-xl bg-surface-container-high flex items-center justify-center text-primary shadow-sm">
+<span class="material-symbols-outlined text-[26px]">account_balance</span>
+</div>
+<div class="flex flex-col"><h1 class="font-headline-lg text-headline-lg text-on-surface">Paytm Payments Bank</h1><p class="font-body-sm text-body-sm text-on-surface-variant flex items-center gap-2"><span class="">Entity ID: <span class="font-code-md text-code-md text-on-surface">FIN-IN-9941</span></span></p></div>
+</div>
+<div class="flex items-center gap-3">
+<button class="px-3 py-1.5 rounded-lg bg-surface-container hover:bg-surface-container-high text-on-surface font-label-md text-label-md transition-colors flex items-center gap-1.5 shadow-sm">
+<span class="material-symbols-outlined text-[16px]">sync</span>
+<span class="">Re-evaluate</span>
+</button>
+<button class="px-3.5 py-1.5 rounded-lg bg-primary hover:bg-primary-container text-on-primary font-label-md text-label-md transition-colors flex items-center gap-1.5 shadow-sm">
+<span class="material-symbols-outlined text-[16px]">download</span>
+<span class="">PDF Download</span>
+</button>
+</div>
+</div>
+<!-- Workspace Tabs Navigation -->
+<div class="flex items-center gap-1 bg-surface-container-low p-1 rounded-xl w-fit">
+<button class="px-4 py-2 rounded-lg font-label-md text-label-md text-on-surface-variant hover:text-on-surface hover:bg-surface-container transition-colors">Overview</button>
+<button class="px-4 py-2 rounded-lg font-label-md text-label-md bg-surface-container-high text-on-surface shadow-sm flex items-center gap-2">
+<span class="w-2 h-2 rounded-full bg-primary"></span>
+        Global Compliance
+      </button>
+<button class="px-4 py-2 rounded-lg font-label-md text-label-md text-on-surface-variant hover:text-on-surface hover:bg-surface-container transition-colors">Regulation Diff</button>
+<button class="px-4 py-2 rounded-lg font-label-md text-label-md text-on-surface-variant hover:text-on-surface hover:bg-surface-container transition-colors flex items-center gap-1.5">
+        AI Agents
+        <span class="px-1.5 py-0.2 rounded bg-surface-variant text-primary text-[10px] font-label-sm">4</span>
+</button>
+<button class="px-4 py-2 rounded-lg font-label-md text-label-md text-on-surface-variant hover:text-on-surface hover:bg-surface-container transition-colors">Company Profile</button>
+</div>
+</div>
+<!-- Subheader & Dynamic Scoring Legend -->
+<div class="flex flex-wrap items-end justify-between gap-4 pb-6 mb-6">
+<div class="flex flex-col gap-1">
+<h2 class="font-headline-md text-headline-md text-on-surface">Global Compliance</h2>
+<p class="font-body-md text-body-md text-on-surface-variant">Real-time status analysis mapped against 4 jurisdictional registries and 5 regulatory pillars.</p>
+</div>
+<!-- Score Threshold Legend -->
+<div class="flex items-center gap-5 bg-surface-container px-4 py-2 rounded-xl text-on-surface-variant font-label-sm text-label-sm shadow-sm">
+<span class="text-on-surface font-label-md">Index Scale:</span>
+<div class="flex items-center gap-2">
+<span class="w-2.5 h-2.5 rounded-full bg-secondary"></span>
+<span class="">Compliant (≥85%)</span>
+</div>
+<div class="flex items-center gap-2">
+<span class="w-2.5 h-2.5 rounded-full bg-tertiary"></span>
+<span class="">Warning (70–84%)</span>
+</div>
+<div class="flex items-center gap-2">
+<span class="w-2.5 h-2.5 rounded-full bg-error"></span>
+<span class="">High Risk (&lt;70%)</span>
+</div>
+<div class="flex items-center gap-2">
+<span class="w-2.5 h-2.5 rounded-full bg-outline-variant"></span>
+<span class="">Insufficient Data</span>
+</div>
+</div>
+</div>
+<!-- Workspace 12-Column Split: 8 Cols Matrix + 4 Cols Detail Inspector -->
+<div class="grid grid-cols-12 gap-6 items-start">
+<!-- Matrix Main Grid Table (8 Columns) -->
+<div class="col-span-12 lg:col-span-8 flex flex-col gap-4">
+<div class="bg-surface-container rounded-xl overflow-hidden shadow-sm">
+<!-- Table Column Headers -->
+<div class="grid grid-cols-12 bg-surface-container-high px-5 py-3 text-on-surface-variant font-label-md text-label-md">
+<div class="col-span-4 flex items-center gap-2">
+<span class="material-symbols-outlined text-[16px]">domain</span>
+<span class="">Domain Pillar</span>
+</div>
+<div class="col-span-2 text-center flex items-center justify-center gap-1.5">
+<span class="w-2 h-2 rounded-full bg-primary/70"></span>
+<span class="">India</span>
+</div>
+<div class="col-span-2 text-center flex items-center justify-center gap-1.5">
+<span class="w-2 h-2 rounded-full bg-primary/40"></span>
+<span class="">United Kingdom</span>
+</div>
+<div class="col-span-2 text-center flex items-center justify-center gap-1.5">
+<span class="w-2 h-2 rounded-full bg-primary/40"></span>
+<span class="">United States</span>
+</div>
+<div class="col-span-2 text-center flex items-center justify-center gap-1.5">
+<span class="w-2 h-2 rounded-full bg-primary/40"></span>
+<span class="">Singapore</span>
+</div>
+</div>
+<!-- Matrix Body Rows -->
+<div class="flex flex-col p-2 gap-1.5">
+<!-- Row 1: Data Protection -->
+<div class="grid grid-cols-12 items-center px-3 py-2 rounded-lg bg-surface-container-low hover:bg-surface-container-high/40 transition-colors">
+<div class="col-span-4 flex items-center gap-3 pr-2">
+<span class="material-symbols-outlined text-primary text-[20px]">shield</span>
+<div class="flex flex-col">
+<span class="font-headline-sm text-label-md text-on-surface">Data Protection</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">DPDP Act, GDPR, CCPA</span>
+</div>
+</div>
+<div class="col-span-2 p-1">
+<button class="w-full flex items-center justify-between px-3 py-2 rounded-lg bg-surface hover:bg-surface-container-high transition-all" onclick="inspectCell('india', 'dataprotection')">
+<span class="w-2 h-2 rounded-full bg-secondary"></span>
+<span class="font-headline-sm text-headline-sm text-secondary">86%</span>
+</button>
+</div>
+<div class="col-span-2 p-1">
+<button class="w-full flex items-center justify-between px-3 py-2 rounded-lg bg-surface hover:bg-surface-container-high transition-all" onclick="inspectCell('uk', 'dataprotection')">
+<span class="w-2 h-2 rounded-full bg-tertiary"></span>
+<span class="font-headline-sm text-headline-sm text-tertiary">71%</span>
+</button>
+</div>
+<div class="col-span-2 p-1">
+<button class="w-full flex items-center justify-between px-3 py-2 rounded-lg bg-surface hover:bg-surface-container-high transition-all" onclick="inspectCell('us', 'dataprotection')">
+<span class="w-2 h-2 rounded-full bg-secondary"></span>
+<span class="font-headline-sm text-headline-sm text-secondary">91%</span>
+</button>
+</div>
+<div class="col-span-2 p-1">
+<button class="w-full flex items-center justify-between px-3 py-2 rounded-lg bg-surface hover:bg-surface-container-high transition-all" onclick="inspectCell('sg', 'dataprotection')">
+<span class="w-2 h-2 rounded-full bg-tertiary"></span>
+<span class="font-headline-sm text-headline-sm text-tertiary">78%</span>
+</button>
+</div>
+</div>
+<!-- Row 2: Cybersecurity (Selected Target India) -->
+<div class="grid grid-cols-12 items-center px-3 py-2 rounded-lg bg-surface-container-low hover:bg-surface-container-high/40 transition-colors">
+<div class="col-span-4 flex items-center gap-3 pr-2">
+<span class="material-symbols-outlined text-primary text-[20px]">lock_reset</span>
+<div class="flex flex-col">
+<span class="font-headline-sm text-label-md text-on-surface">Cybersecurity</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">CERT-In, PRA SS2/21, NYDFS</span>
+</div>
+</div>
+<!-- Focused / Active Cell -->
+<div class="col-span-2 p-1">
+<button class="w-full flex items-center justify-between px-3 py-2 rounded-lg bg-surface-container-highest shadow-md transition-all" id="cell-india-cybersecurity" onclick="inspectCell('india', 'cybersecurity')">
+<div class="flex items-center gap-1.5">
+<span class="w-2 h-2 rounded-full bg-tertiary animate-pulse"></span>
+<span class="font-label-sm text-[10px] uppercase text-tertiary">Focus</span>
+</div>
+<span class="font-headline-sm text-headline-sm text-tertiary">74%</span>
+</button>
+</div>
+<div class="col-span-2 p-1">
+<button class="w-full flex items-center justify-between px-3 py-2 rounded-lg bg-surface hover:bg-surface-container-high transition-all" onclick="inspectCell('uk', 'cybersecurity')">
+<span class="w-2 h-2 rounded-full bg-secondary"></span>
+<span class="font-headline-sm text-headline-sm text-secondary">89%</span>
+</button>
+</div>
+<div class="col-span-2 p-1">
+<button class="w-full flex items-center justify-between px-3 py-2 rounded-lg bg-surface hover:bg-surface-container-high transition-all" onclick="inspectCell('us', 'cybersecurity')">
+<span class="w-2 h-2 rounded-full bg-secondary"></span>
+<span class="font-headline-sm text-headline-sm text-secondary">93%</span>
+</button>
+</div>
+<div class="col-span-2 p-1">
+<button class="w-full flex items-center justify-between px-3 py-2 rounded-lg bg-surface hover:bg-surface-container-high transition-all" onclick="inspectCell('sg', 'cybersecurity')">
+<span class="w-2 h-2 rounded-full bg-error"></span>
+<span class="font-headline-sm text-headline-sm text-error">68%</span>
+</button>
+</div>
+</div>
+<!-- Row 3: Financial Rules -->
+<div class="grid grid-cols-12 items-center px-3 py-2 rounded-lg bg-surface-container-low hover:bg-surface-container-high/40 transition-colors">
+<div class="col-span-4 flex items-center gap-3 pr-2">
+<span class="material-symbols-outlined text-primary text-[20px]">currency_exchange</span>
+<div class="flex flex-col">
+<span class="font-headline-sm text-label-md text-on-surface">Financial Rules</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">RBI PPI &amp; Escrow, FCA CASS</span>
+</div>
+</div>
+<div class="col-span-2 p-1">
+<button class="w-full flex items-center justify-between px-3 py-2 rounded-lg bg-surface hover:bg-surface-container-high transition-all" onclick="inspectCell('india', 'financial')">
+<span class="w-2 h-2 rounded-full bg-secondary"></span>
+<span class="font-headline-sm text-headline-sm text-secondary">94%</span>
+</button>
+</div>
+<div class="col-span-2 p-1">
+<button class="w-full flex items-center justify-between px-3 py-2 rounded-lg bg-surface hover:bg-surface-container-high transition-all" onclick="inspectCell('uk', 'financial')">
+<span class="w-2 h-2 rounded-full bg-tertiary"></span>
+<span class="font-headline-sm text-headline-sm text-tertiary">76%</span>
+</button>
+</div>
+<div class="col-span-2 p-1">
+<button class="w-full flex items-center justify-between px-3 py-2 rounded-lg bg-surface hover:bg-surface-container-high transition-all" onclick="inspectCell('us', 'financial')">
+<span class="w-2 h-2 rounded-full bg-error"></span>
+<span class="font-headline-sm text-headline-sm text-error">52%</span>
+</button>
+</div>
+<div class="col-span-2 p-1">
+<button class="w-full flex items-center justify-between px-3 py-2 rounded-lg bg-surface hover:bg-surface-container-high transition-all" onclick="inspectCell('sg', 'financial')">
+<span class="w-2 h-2 rounded-full bg-secondary"></span>
+<span class="font-headline-sm text-headline-sm text-secondary">88%</span>
+</button>
+</div>
+</div>
+<!-- Row 4: Reporting -->
+<div class="grid grid-cols-12 items-center px-3 py-2 rounded-lg bg-surface-container-low hover:bg-surface-container-high/40 transition-colors">
+<div class="col-span-4 flex items-center gap-3 pr-2">
+<span class="material-symbols-outlined text-primary text-[20px]">assignment_turned_in</span>
+<div class="flex flex-col">
+<span class="font-headline-sm text-label-md text-on-surface">Reporting</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Periodic Audits &amp; STR Logs</span>
+</div>
+</div>
+<div class="col-span-2 p-1">
+<button class="w-full flex items-center justify-between px-3 py-2 rounded-lg bg-surface hover:bg-surface-container-high transition-all" onclick="inspectCell('india', 'reporting')">
+<span class="w-2 h-2 rounded-full bg-tertiary"></span>
+<span class="font-headline-sm text-headline-sm text-tertiary">81%</span>
+</button>
+</div>
+<div class="col-span-2 p-1">
+<button class="w-full flex items-center justify-between px-3 py-2 rounded-lg bg-surface hover:bg-surface-container-high transition-all" onclick="inspectCell('uk', 'reporting')">
+<span class="w-2 h-2 rounded-full bg-secondary"></span>
+<span class="font-headline-sm text-headline-sm text-secondary">91%</span>
+</button>
+</div>
+<div class="col-span-2 p-1">
+<button class="w-full flex items-center justify-between px-3 py-2 rounded-lg bg-surface hover:bg-surface-container-high transition-all" onclick="inspectCell('us', 'reporting')">
+<span class="w-2 h-2 rounded-full bg-tertiary"></span>
+<span class="font-headline-sm text-headline-sm text-tertiary">73%</span>
+</button>
+</div>
+<div class="col-span-2 p-1">
+<button class="w-full flex items-center justify-between px-3 py-2 rounded-lg bg-surface hover:bg-surface-container-high transition-all" onclick="inspectCell('sg', 'reporting')">
+<span class="w-2 h-2 rounded-full bg-secondary"></span>
+<span class="font-headline-sm text-headline-sm text-secondary">85%</span>
+</button>
+</div>
+</div>
+<!-- Row 5: Third-Party Risk -->
+<div class="grid grid-cols-12 items-center px-3 py-2 rounded-lg bg-surface-container-low hover:bg-surface-container-high/40 transition-colors">
+<div class="col-span-4 flex items-center gap-3 pr-2">
+<span class="material-symbols-outlined text-primary text-[20px]">hub</span>
+<div class="flex flex-col">
+<span class="font-headline-sm text-label-md text-on-surface">Third-Party Risk</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Vendor SLAs, Cloud Governance</span>
+</div>
+</div>
+<div class="col-span-2 p-1">
+<button class="w-full flex items-center justify-between px-3 py-2 rounded-lg bg-surface hover:bg-surface-container-high transition-all" onclick="inspectCell('india', 'thirdparty')">
+<span class="w-2 h-2 rounded-full bg-error"></span>
+<span class="font-headline-sm text-headline-sm text-error">67%</span>
+</button>
+</div>
+<div class="col-span-2 p-1">
+<button class="w-full flex items-center justify-between px-3 py-2 rounded-lg bg-surface hover:bg-surface-container-high transition-all" onclick="inspectCell('uk', 'thirdparty')">
+<span class="w-2 h-2 rounded-full bg-tertiary"></span>
+<span class="font-headline-sm text-headline-sm text-tertiary">72%</span>
+</button>
+</div>
+<div class="col-span-2 p-1">
+<button class="w-full flex items-center justify-between px-3 py-2 rounded-lg bg-surface hover:bg-surface-container-high transition-all" onclick="inspectCell('us', 'thirdparty')">
+<span class="w-2 h-2 rounded-full bg-secondary"></span>
+<span class="font-headline-sm text-headline-sm text-secondary">88%</span>
+</button>
+</div>
+<div class="col-span-2 p-1">
+<button class="w-full flex items-center justify-between px-3 py-2 rounded-lg bg-surface hover:bg-surface-container-high transition-all opacity-60" onclick="inspectCell('sg', 'thirdparty')">
+<span class="w-2 h-2 rounded-full bg-outline-variant"></span>
+<span class="font-headline-sm text-headline-sm text-outline">--</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+<!-- Quick Matrix Operational Telemetry -->
+<div class="grid grid-cols-3 gap-4"><div class="p-4 rounded-xl bg-surface-container flex flex-col gap-1 shadow-sm"><span class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider">Evaluated Cells</span><div class="flex items-baseline justify-between mt-1"><span class="font-headline-sm text-headline-sm text-on-surface">20</span><span class="font-label-sm text-label-sm text-secondary">100% Tracked</span></div><span class="font-body-sm text-body-sm text-on-surface-variant">Across 5 core pillars</span></div><div class="p-4 rounded-xl bg-surface-container flex flex-col gap-1 shadow-sm"><span class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider">High Risk Exposures</span><div class="flex items-baseline justify-between mt-1"><span class="font-headline-sm text-headline-sm text-error">3 Domains</span><span class="material-symbols-outlined text-error text-[20px]">warning</span></div><span class="font-body-sm text-body-sm text-on-surface-variant">India (TPRM), US (Fin), SG (Cyber)</span></div><div class="p-4 rounded-xl bg-surface-container flex flex-col gap-1 shadow-sm"><span class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider">Active Jurisdictions</span><div class="flex items-baseline justify-between mt-1"><span class="font-headline-sm text-headline-sm text-on-surface">4</span><span class="material-symbols-outlined text-primary text-[20px]">public</span></div><span class="font-body-sm text-body-sm text-on-surface-variant">IN, UK, US, SG</span></div></div>
+</div>
+<!-- Right-Side Cell Inspector Panel (4 Columns) -->
+<div class="col-span-12 lg:col-span-4 flex flex-col gap-4">
+<div class="p-6 rounded-xl bg-surface-container shadow-md flex flex-col gap-5">
+<!-- Inspector Header -->
+<div class="flex items-start justify-between pb-4 bg-surface-container">
+<div class="flex flex-col gap-1">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary text-[18px]">verified_user</span>
+<span class="font-label-sm text-label-sm uppercase tracking-wider text-on-surface-variant" id="inspector-jurisdiction">JURISDICTION DETAIL</span>
+</div>
+<h3 class="font-headline-md text-headline-md text-on-surface" id="inspector-title">INDIA — CYBERSECURITY</h3>
+</div>
+<div class="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-secondary-container/20 text-secondary">
+<span class="w-1.5 h-1.5 rounded-full bg-secondary"></span>
+<span class="font-label-sm text-label-sm uppercase" id="inspector-badge">Applicable</span>
+</div>
+</div>
+<!-- Metric Confidence & Health Bar -->
+<div class="p-4 rounded-xl bg-surface-container-high flex flex-col gap-3"><div class="flex items-center justify-between"><span class="font-label-md text-label-md text-on-surface-variant">Confidence</span><span class="font-headline-sm text-headline-sm text-on-surface" id="inspector-confidence">94%</span></div><div class="w-full bg-surface-container-lowest h-2 rounded-full overflow-hidden"><div class="bg-primary h-full rounded-full transition-all duration-500" id="inspector-confidence-bar" style="width: 94%;"></div></div></div>
+<!-- Core Mandate Requirement -->
+<div class="flex flex-col gap-1.5">
+<span class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider">Mandatory Requirement</span>
+<div class="p-3.5 rounded-lg bg-surface-container-low text-on-surface font-body-md text-body-md">
+<p id="inspector-requirement" class="">Mandatory 6-hour cybersecurity incident reporting to CERT-In.</p>
+</div>
+</div>
+<!-- Audit Explanation -->
+<div class="flex flex-col gap-1.5">
+<span class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider">Entity Impact &amp; Context</span>
+<p class="font-body-md text-body-md text-on-surface-variant" id="inspector-explanation">
+            Paytm operates critical financial payment infrastructure handling &gt;10M transactions daily, triggering mandatory CERT-In reporting thresholds.
+          </p>
+</div>
+<!-- Regulatory Source Tag -->
+<div class="flex flex-col gap-1.5">
+<span class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider">Regulatory Reference</span>
+<div class="p-3 rounded-lg bg-surface-container-lowest flex items-start gap-2.5">
+<span class="material-symbols-outlined text-outline text-[18px] mt-0.5">bookmark</span>
+<span class="font-code-md text-code-md text-primary break-all" id="inspector-source">CERT-In Directions 20(3)/2022-CERT-In &amp; RBI Cyber Security Framework</span>
+</div>
+</div>
+<!-- Remediation & Recommended Action -->
+<div class="flex flex-col gap-1.5">
+<span class="font-label-sm text-label-sm text-tertiary uppercase tracking-wider flex items-center gap-1.5">
+<span class="material-symbols-outlined text-[15px]">priority_high</span>
+            Recommended Remediation
+          </span>
+<div class="p-3.5 rounded-lg bg-tertiary-container/10 text-on-surface font-body-md text-body-md">
+<p id="inspector-action" class="">Update internal incident response protocol from 24-hour escalation to 6-hour SLA.</p>
+</div>
+</div>
+<!-- Action CTA -->
+<div class="pt-2 flex flex-col gap-2">
+<button class="w-full py-2.5 px-4 rounded-lg bg-primary hover:bg-primary-container text-on-primary font-headline-sm text-label-md transition-colors flex items-center justify-center gap-2 shadow-sm">
+<span class="">View Source Provision</span>
+<span class="material-symbols-outlined text-[16px]">arrow_outward</span>
+</button>
+<button class="w-full py-2 px-4 rounded-lg bg-surface-container-high hover:bg-surface-variant text-on-surface font-label-md text-label-md transition-colors text-center">Add to Action Plan</button>
+</div>
+</div>
+</div>
+</div>
+</div>
+<script>
+  // Simple Inspector interactive payload mapper
+  const inspectorData = {
+    'india_cybersecurity': {
+      title: 'INDIA — CYBERSECURITY',
+      badge: 'Applicable',
+      confidence: '94%',
+      barWidth: '94%',
+      requirement: 'Mandatory 6-hour cybersecurity incident reporting to CERT-In.',
+      explanation: 'Paytm operates critical financial payment infrastructure handling >10M transactions daily, triggering mandatory CERT-In reporting thresholds.',
+      source: 'CERT-In Directions 20(3)/2022-CERT-In & RBI Cyber Security Framework',
+      action: 'Update internal incident response protocol from 24-hour escalation to 6-hour SLA.'
+    },
+    'india_dataprotection': {
+      title: 'INDIA — DATA PROTECTION',
+      badge: 'Compliant',
+      confidence: '98%',
+      barWidth: '98%',
+      requirement: 'Explicit consent artifacts & localized transaction record retention.',
+      explanation: 'Indian Digital Personal Data Protection Act requires auditable data fiduciary registries for fintech operations.',
+      source: 'DPDP Act 2023 Sec 6(1) & RBI Directive on Storage of Payment Data',
+      action: 'Routine quarterly log validation of localized AWS Mumbai bucket mirrors.'
+    },
+    'us_financial': {
+      title: 'UNITED STATES — FINANCIAL RULES',
+      badge: 'High Risk',
+      confidence: '89%',
+      barWidth: '89%',
+      requirement: 'Cross-border remittance licensing & FinCEN MSB registration under BSA.',
+      explanation: 'Paytm cross-border corridor activities require state-by-state money transmitter licenses without bank partnership umbrella.',
+      source: 'FinCEN BSA 31 CFR § 1022.380 & NYDFS 23 NYCRR 417',
+      action: 'File emergency FinCEN Form 107 amendment and ring-fence US inbound transactions.'
+    },
+    'sg_cybersecurity': {
+      title: 'SINGAPORE — CYBERSECURITY',
+      badge: 'High Risk',
+      confidence: '91%',
+      barWidth: '91%',
+      requirement: 'MAS Notice 644 incident notification within 1 hour of unmitigated threat.',
+      explanation: 'Current logging nodes in Singapore region have unresolved telemetry latency flags.',
+      source: 'MAS Technology Risk Management (TRM) Guidelines Para 5.2.1',
+      action: 'Implement automated real-time ping monitors in Singapore cloud gateway.'
+    }
+  };
+
+  function inspectCell(jurisdiction, pillar) {
+    const key = jurisdiction + '_' + pillar;
+    const data = inspectorData[key] || {
+      title: (jurisdiction.toUpperCase()) + ' — ' + (pillar.toUpperCase()),
+      badge: 'Monitored',
+      confidence: '88%',
+      barWidth: '88%',
+      requirement: 'Regulatory telemetry synchronized. Minimum capital & SLA covenants evaluated.',
+      explanation: 'Entity operations verified against active central bank circulars with no pending stop orders.',
+      source: 'Statutory Registry Circular Ref: ' + jurisdiction.toUpperCase() + '-2024-SYS',
+      action: 'Maintain automated periodic surveillance.'
+    };
+
+    document.getElementById('inspector-title').textContent = data.title;
+    document.getElementById('inspector-badge').textContent = data.badge;
+    document.getElementById('inspector-confidence').textContent = data.confidence;
+    document.getElementById('inspector-confidence-bar').style.width = data.barWidth;
+    document.getElementById('inspector-requirement').textContent = data.requirement;
+    document.getElementById('inspector-explanation').textContent = data.explanation;
+    document.getElementById('inspector-source').textContent = data.source;
+    document.getElementById('inspector-action').textContent = data.action;
+  }
+</script></main></div>
+
+</body></html>
